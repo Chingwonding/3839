@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.util.Range;
 
 
 @Autonomous(name = "Auto")
+//naming  a class so it can be accessed from the driver station
 
 public class FirstAuto extends LinearOpMode {
 
@@ -17,7 +18,11 @@ public class FirstAuto extends LinearOpMode {
          robot.init(hardwareMap);
          //always add telemetry update() to make sure telemetry runs repeatedly
          telemetry.addData("Status", "Hello, Drivers!");
+         //each string we set like this is for the driver station
+         //basically print statement
          telemetry.update();
+         //updates position
+
 
          waitForStart();
          //essentially our main method for doing stuff
@@ -42,11 +47,14 @@ public class FirstAuto extends LinearOpMode {
         robot.lf.setTargetPosition((int)Math.round(ticks));
         robot.rb.setTargetPosition((int)Math.round(ticks));
         robot.lb.setTargetPosition((int)Math.round(ticks));
+        //type casting ticks to be an integer
 
+        //resetting encoders so that previously stored values are not stored
         robot.rf.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.lf.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.rb.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.lb.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
 
         robot.setPower(speed, speed, speed, speed);
         while (opModeIsActive() && robot.lb.isBusy())
