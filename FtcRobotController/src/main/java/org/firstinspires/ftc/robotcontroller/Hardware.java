@@ -40,9 +40,9 @@ public class Hardware {
 
     }
 
-
+    //what's the purpose of init?
     public void init(HardwareMap hwMap) {
-        //defining variable
+        //defining variable to driver screen
         rf = hwMap.get(DcMotor.class, "rf");
         rf.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rf.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
