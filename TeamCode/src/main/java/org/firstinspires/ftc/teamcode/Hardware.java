@@ -11,6 +11,8 @@ public class Hardware {
     //encoder: measures how many time the magnets pass, doesn't account for slip
     //odometry: corrects position and sees exact location
 
+    //test
+
     public DcMotor rf;
     public DcMotor lf;
     public DcMotor rb;
