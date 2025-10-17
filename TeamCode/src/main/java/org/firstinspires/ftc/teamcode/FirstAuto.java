@@ -3,7 +3,7 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
-
+import org.firstinspires.ftc.teamcode.Hardware;
 @Autonomous(name = "Auto")
 public class FirstAuto extends LinearOpMode {
 
@@ -11,7 +11,7 @@ public class FirstAuto extends LinearOpMode {
 
     //essentially our main method
     public void runOpMode(){
-        robot.inti(hardwareMap);
+        robot.init(hardwareMap);
         //always add telemetry.update() to make sure telemetry runs repeatedly
         telemetry.addData("Status", "Hello, Drivers!");
         telemetry.update();

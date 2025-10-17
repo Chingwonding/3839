@@ -31,7 +31,7 @@ public class Hardware {
     }
 
 
-    public void inti(HardwareMap hwMap) {
+    public void init(HardwareMap hwMap) {
         rf = hwMap.get(DcMotor.class, "rf");
         rf.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rf.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
