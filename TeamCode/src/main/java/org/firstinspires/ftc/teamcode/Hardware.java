@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
@@ -24,6 +26,7 @@ public class Hardware {
         return myInstance;
     }
 
+    /*
     public void init(HardwareMap hwMap) {
         //time based: why is it bad? uses time, does not account for slippage
         //encoder: what is it? counts ticks to get to position, slippage
@@ -54,6 +57,35 @@ public class Hardware {
 
         demoServo = hwMap.get(Servo.class, "demoServo");
     }
+    */
+    public void init(HardwareMap hwMap) {
+
+        rf = hwMap.get(DcMotorEx.class, "em0");
+        //rf.setDirection(DcMotorSimple.Direction.REVERSE);
+        rf.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+//        rf.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        rf.setPower(0);
+        //1
+
+        rb = hwMap.get(DcMotorEx.class, "em3");
+        rb.setDirection(DcMotorSimple.Direction.REVERSE);
+        rb.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+//        rb.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        rb.setPower(0);
+        //3
+
+        lf = hwMap.get(DcMotorEx.class, "cm1");
+        lf.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+//        lf.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        lf.setPower(0);
+        //0
+
+        lb = hwMap.get(DcMotorEx.class, "cm2");
+        lb.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+//        lb.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        lb.setPower(0);
+    }
+
     public void setPower(double fr, double br, double bl, double fl) {
 
         rf.setPower(Range.clip(fr, -maxSpeed, maxSpeed));

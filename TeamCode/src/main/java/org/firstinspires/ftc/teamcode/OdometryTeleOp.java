@@ -11,43 +11,22 @@ import com.qualcomm.robotcore.util.Range;
 
 @TeleOp (name = "Demo for 3839")
 public class OdometryTeleOp extends LinearOpMode {
-    public DcMotorEx rf;
-    public DcMotorEx rb;
-    public DcMotorEx lf;
-    public DcMotorEx lb;
-    public void init(HardwareMap hwMap) {
 
-        rf = hwMap.get(DcMotorEx.class, "rf");
-        rf.setDirection(DcMotorSimple.Direction.REVERSE);
-        rf.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-//        rf.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        rf.setPower(0);
-        //1
 
-        rb = hwMap.get(DcMotorEx.class, "rr");
-        rb.setDirection(DcMotorSimple.Direction.REVERSE);
-        rb.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-//        rb.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        rb.setPower(0);
-        //3
 
-        lf = hwMap.get(DcMotorEx.class, "lf");
-        lf.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-//        lf.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        lf.setPower(0);
-        //0
-
-        lb = hwMap.get(DcMotorEx.class, "lr");
-        lb.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-//        lb.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        lb.setPower(0);
-    }
+    Hardware robot = Hardware.getInstance();
 
     public void runOpMode(){
         double forward, sideways, turning, max;
         double scaleFactor = 0.8;
 
-        init(hardwareMap);
+        //before autonomous code starts
+        robot.init(hardwareMap);
+        // In autonomous we will press init then leave the robot, initializing the hardware class
+        //always add telemetry.update() to make sure telemetry runs repeatedly
+        telemetry.addData( "Statue", "Hello Drivers");
+        telemetry.update();
+
         waitForStart();
         while (opModeIsActive()) {
 
@@ -61,15 +40,10 @@ public class OdometryTeleOp extends LinearOpMode {
                 scaleFactor = 1;
             }
             scaleFactor *= Math.max(Math.abs(1 - gamepad1.right_trigger), 0.2);
-            setPower((forward - sideways - turning) * scaleFactor, (forward + sideways - turning) * scaleFactor, (forward + sideways + turning) * scaleFactor, (forward + turning - sideways) * scaleFactor);
+            robot.setPower((forward - sideways - turning) * scaleFactor, (forward + sideways - turning) * scaleFactor, (forward + sideways + turning) * scaleFactor, (forward + turning - sideways) * scaleFactor);
         }
     }
-    public void setPower(double fr, double br, double fl, double bl){
-        rf.setPower(Range.clip(fr, -1, 1));
-        rb.setPower(Range.clip(br, -1, 1));
-        lf.setPower(Range.clip(fl, -1, 1));
-        lb.setPower(Range.clip(bl, -1, 1));
-    }
+
 }
 
 
