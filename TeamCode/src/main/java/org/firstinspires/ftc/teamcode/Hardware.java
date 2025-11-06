@@ -14,7 +14,13 @@ public class Hardware {
     public DcMotor lf;
     public DcMotor rb;
     public DcMotor lb;
-    public Servo demoServo;
+
+    //intake motors and servo
+    public DcMotor leftShot;
+    public DcMotor rightShot;
+    public Servo shotServo;
+
+
     public static double maxSpeed = 0.9;
 
     private static Hardware myInstance = null;
@@ -84,6 +90,8 @@ public class Hardware {
         lb.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 //        lb.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         lb.setPower(0);
+
+        shotServo = hwMap.get(Servo.class, "es1");
     }
 
     public void setPower(double fr, double br, double bl, double fl) {
