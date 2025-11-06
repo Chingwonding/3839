@@ -20,6 +20,8 @@ public class Hardware {
     public DcMotor rightShot;
     public Servo shotServo;
 
+    public Servo Servotwo;
+
 
     public static double maxSpeed = 0.9;
 
@@ -92,6 +94,8 @@ public class Hardware {
         lb.setPower(0);
 
         shotServo = hwMap.get(Servo.class, "es1");
+
+        Servotwo = hwMap.get(Servo.class, "es2");
     }
 
     public void setPower(double fr, double br, double bl, double fl) {
