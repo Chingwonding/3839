@@ -16,11 +16,19 @@ public class Hardware {
     public DcMotor lb;
 
     //intake motors and servo
-    public DcMotor leftShot;
-    public DcMotor rightShot;
+
+
+    //motor for shooting
+    public DcMotor shotMotor;
+    
+    
+
+    //servos
     public Servo shotServo;
 
     public Servo Servotwo;
+
+    public Servo Servothree;
 
 
     public static double maxSpeed = 0.9;
@@ -93,9 +101,16 @@ public class Hardware {
 //        lb.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         lb.setPower(0);
 
+        //motor for shooting
+        shotMotor = hwMap.get(DcMotorEx.class, "em3");
+        shotMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        shotMotor.setPower(0);
+
         shotServo = hwMap.get(Servo.class, "es1");
 
         Servotwo = hwMap.get(Servo.class, "es2");
+
+        Servothree = hwMap.get(Servo.class, "es3");
     }
 
     public void setPower(double fr, double br, double bl, double fl) {
@@ -105,9 +120,13 @@ public class Hardware {
         rb.setPower(Range.clip(br, -maxSpeed, maxSpeed));
         lb.setPower(Range.clip(bl, -maxSpeed, maxSpeed));
 
+
     }
 
+
     //reverse rf and fix lb hardware wise
+
+    //public void
 
 
 }

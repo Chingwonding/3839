@@ -58,6 +58,8 @@ public class FirstAuto extends LinearOpMode {
 
 
     }
+    //make new method for setting shot speed??
+
     public void turning (int ticks, double speed){
 
         robot. rf.setTargetPosition(ticks);
