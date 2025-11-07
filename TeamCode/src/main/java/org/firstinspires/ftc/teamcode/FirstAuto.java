@@ -24,6 +24,7 @@ public class FirstAuto extends LinearOpMode {
         move(3, 0.67);
         turning(800,0.2);
     }
+    //we can use telemetry for now?
     public void move(double distance, double speed){
         double wheelCircumference = 4 * Math.PI;
         double motor = 560;

@@ -102,6 +102,7 @@ public class Hardware {
         lb.setPower(0);
 
         //motor for shooting
+        //I set it two em3 can change it later
         shotMotor = hwMap.get(DcMotorEx.class, "em3");
         shotMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         shotMotor.setPower(0);
