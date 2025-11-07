@@ -42,6 +42,10 @@ public class OdometryTeleOp extends LinearOpMode {
         waitForStart();
         while (opModeIsActive()) {
 
+            robot.shotMotor.setPower(0.88);
+
+
+
             forward = -(Math.atan(5 * -gamepad1.left_stick_y) / Math.atan(5));
             sideways = (Math.atan(5 * gamepad1.left_stick_x) / Math.atan(5));
             turning = (Math.atan(5 * -gamepad1.right_stick_x) / Math.atan(5)) * 0.5;
