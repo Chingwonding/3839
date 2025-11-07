@@ -121,7 +121,6 @@ public class Hardware {
         rb.setPower(Range.clip(br, -maxSpeed, maxSpeed));
         lb.setPower(Range.clip(bl, -maxSpeed, maxSpeed));
 
-
     }
 
 
