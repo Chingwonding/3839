@@ -111,7 +111,7 @@ public class Hardware {
 
         Servotwo = hwMap.get(Servo.class, "es2");
 
-        Servothree = hwMap.get(Servo.class, "es3");
+        //Servothree = hwMap.get(Servo.class, "es0");
     }
 
     public void setPower(double fr, double br, double bl, double fl) {
