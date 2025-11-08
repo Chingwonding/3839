@@ -83,7 +83,7 @@ public class OdometryTeleOp extends LinearOpMode {
                 shotOrNah += 1;
                 if (shotOrNah % 2 == 0)
                 {
-                    robot.shotMotor.setPower(0.88);
+                    robot.shotMotor.setPower(1.0);
 
                 }
                 else
@@ -98,6 +98,14 @@ public class OdometryTeleOp extends LinearOpMode {
                 //if I put the counter at the end I think it might take 2 to get the desired effect at the beginning
 
             }
+            //robot.shotMotor.setPower(1.0);
+
+            /*if(gamepad1.left_bumper)
+            {
+                robot.shotMotor.setPower(1.0);
+            }
+            
+             */
 
 
 
@@ -144,7 +152,7 @@ public class OdometryTeleOp extends LinearOpMode {
             {
 
 
-                robot.shotServo.setPosition(0.998);
+                robot.shotServo.setPosition(0.888);
                 waitingToShoot = true;
                 TargetTime = (long) (System.currentTimeMillis() + delay);
 
