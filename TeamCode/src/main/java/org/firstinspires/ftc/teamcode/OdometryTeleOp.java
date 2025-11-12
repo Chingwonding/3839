@@ -56,9 +56,6 @@ public class OdometryTeleOp extends LinearOpMode {
         while (opModeIsActive()) {
 
 
-            //hopefully this works...
-
-
 
 
             //movement
@@ -92,32 +89,19 @@ public class OdometryTeleOp extends LinearOpMode {
                     robot.shotMotor.setPower(0.0);
                 }
 
-                //the way I coded this right now is that it starts at 1 so the % doesn't show errors in
-                //calculating the math...
-                //by putting the counter above ts it means with one click it turns on
-                //if I put the counter at the end I think it might take 2 to get the desired effect at the beginning
 
             }
             //robot.shotMotor.setPower(1.0);
 
-            /*if(gamepad1.left_bumper)
-            {
-                robot.shotMotor.setPower(1.0);
-            }
-
-             */
 
 
 
 
-            //add this servo to be dropped
+
             //this is servotwo
             if (gamepad1.b)
             {
-                //this should bring it down so the ball can drop
-                //I forgot if it starts at 1 or if it starts at 0.360...
-                //probably starts at 1?
-                //I'm a genius
+
                 upOrDown++;
                 if (upOrDown % 2 == 0)
                 {
@@ -126,24 +110,11 @@ public class OdometryTeleOp extends LinearOpMode {
                 else {
                     robot.Servotwo.setPosition(0.360);
                 }
-                //counter starts at 1
-                //one click-->2 goes into the first if
-                //-->sets position to be 0.998, dropping the ball
-                //confirm positions on Friday
+
 
 
             }
 
-            //we need to add servo three
-            //what does servo three do again?
-            /*
-
-            if (gamepad1.a)
-            {
-                set position to something (we need to test using the servo tester class)
-            }
-
-             */
 
 
 
