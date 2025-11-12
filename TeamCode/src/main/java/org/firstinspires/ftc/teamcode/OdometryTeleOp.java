@@ -52,29 +52,9 @@ public class OdometryTeleOp extends LinearOpMode {
         waitForStart();
         while (opModeIsActive()) {
 
-            drive(-(Math.atan(5 * -gamepad1.left_stick_y) / Math.atan(5)), (Math.atan(5 * gamepad1.left_stick_x) / Math.atan(5)), (Math.atan(5 * -gamepad1.right_stick_x) / Math.atan(5)) * 0.5);
-
-            /*
-            //movement
-            //most important part....
-            //will have to debug fs
-            forward = -(Math.atan(5 * -gamepad1.left_stick_y) / Math.atan(5));
-            sideways = (Math.atan(5 * gamepad1.left_stick_x) / Math.atan(5));
-            turning = (Math.atan(5 * -gamepad1.right_stick_x) / Math.atan(5)) * 0.5;
-
-            max = Math.max(Math.abs(forward - sideways - turning), Math.max(Math.abs(forward + sideways - turning), Math.max(Math.abs(forward + sideways + turning), Math.abs(forward + turning - sideways))));
-            if (max > 1) {
-                scaleFactor = 1 / max;
-            } else {
-                scaleFactor = 1;
-            }
-            scaleFactor *= Math.max(Math.abs(1 - gamepad1.right_trigger), 0.2);
-            robot.setPower((forward - sideways - turning) * scaleFactor, (forward + sideways - turning) * scaleFactor, (forward + sideways + turning) * scaleFactor, (forward + turning - sideways) * scaleFactor);
+            drive(-(Math.atan(5 * -gamepad1.left_stick_y) / Math.atan(5)), (Math.atan(5 * -gamepad1.left_stick_x) / Math.atan(5)), (Math.atan(5 * -gamepad1.right_stick_x) / Math.atan(5)) * 0.5);
 
 
-             */
-            //add separate part for shooting
-            //this is actually for the shooting
             if (gamepad1.x) {
                 shotOrNah += 1;
                 if (shotOrNah % 2 == 0) {

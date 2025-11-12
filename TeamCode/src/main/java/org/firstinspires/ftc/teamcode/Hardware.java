@@ -61,11 +61,13 @@ public class Hardware {
 
         lf = hwMap.get(DcMotorEx.class, "em1");
         lf.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        //lf.setDirection(DcMotorSimple.Direction.REVERSE);
 //        lf.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         lf.setPower(0);
         //0
 
         lb = hwMap.get(DcMotorEx.class, "em2");
+        //lb.setDirection(DcMotorSimple.Direction.REVERSE);
         lb.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 //        lb.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         lb.setPower(0);
