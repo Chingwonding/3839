@@ -23,7 +23,7 @@ public class OdometryTeleOp extends LinearOpMode {
 
 
     //main run method
-    public void runOpMode(){
+    public void runOpMode() {
 
 
         //setting variables
@@ -33,7 +33,7 @@ public class OdometryTeleOp extends LinearOpMode {
 
         robot.init(hardwareMap);
         //always add telemetry.update() to make sure telemetry runs repeatedly
-        telemetry.addData( "Statue", "Hello Drivers");
+        telemetry.addData("Statue", "Hello Drivers");
         telemetry.update();
 
 
@@ -49,21 +49,19 @@ public class OdometryTeleOp extends LinearOpMode {
 
 
 
-
-
-
         waitForStart();
         while (opModeIsActive()) {
 
+            drive(-(Math.atan(5 * -gamepad1.left_stick_y) / Math.atan(5)), (Math.atan(5 * gamepad1.left_stick_x) / Math.atan(5)), (Math.atan(5 * -gamepad1.right_stick_x) / Math.atan(5)) * 0.5);
 
-
-
+            /*
             //movement
             //most important part....
             //will have to debug fs
             forward = -(Math.atan(5 * -gamepad1.left_stick_y) / Math.atan(5));
             sideways = (Math.atan(5 * gamepad1.left_stick_x) / Math.atan(5));
             turning = (Math.atan(5 * -gamepad1.right_stick_x) / Math.atan(5)) * 0.5;
+
             max = Math.max(Math.abs(forward - sideways - turning), Math.max(Math.abs(forward + sideways - turning), Math.max(Math.abs(forward + sideways + turning), Math.abs(forward + turning - sideways))));
             if (max > 1) {
                 scaleFactor = 1 / max;
@@ -73,18 +71,16 @@ public class OdometryTeleOp extends LinearOpMode {
             scaleFactor *= Math.max(Math.abs(1 - gamepad1.right_trigger), 0.2);
             robot.setPower((forward - sideways - turning) * scaleFactor, (forward + sideways - turning) * scaleFactor, (forward + sideways + turning) * scaleFactor, (forward + turning - sideways) * scaleFactor);
 
+
+             */
             //add separate part for shooting
             //this is actually for the shooting
-            if (gamepad1.x)
-            {
+            if (gamepad1.x) {
                 shotOrNah += 1;
-                if (shotOrNah % 2 == 0)
-                {
+                if (shotOrNah % 2 == 0) {
                     robot.shotMotor.setPower(1.0);
 
-                }
-                else
-                {
+                } else {
                     //the motor gets turned off
                     robot.shotMotor.setPower(0.0);
                 }
@@ -94,33 +90,22 @@ public class OdometryTeleOp extends LinearOpMode {
             //robot.shotMotor.setPower(1.0);
 
 
-
-
-
-
             //this is servotwo
-            if (gamepad1.b)
-            {
+            if (gamepad1.b) {
 
                 upOrDown++;
-                if (upOrDown % 2 == 0)
-                {
+                if (upOrDown % 2 == 0) {
                     robot.Servotwo.setPosition(0.998);
-                }
-                else {
+                } else {
                     robot.Servotwo.setPosition(0.360);
                 }
-
 
 
             }
 
 
-
-
             //for servo that launches the ball towards the shooter
-            if (gamepad1.right_trigger > 0.1 && !pressingRT)
-            {
+            if (gamepad1.right_trigger > 0.1 && !pressingRT) {
 
 
                 robot.shotServo.setPosition(0.888);
@@ -128,24 +113,46 @@ public class OdometryTeleOp extends LinearOpMode {
                 TargetTime = (long) (System.currentTimeMillis() + delay);
 
 
-            }
-            else if (!(gamepad1.right_trigger > 0.1))
-            {
+            } else if (!(gamepad1.right_trigger > 0.1)) {
                 pressingRT = false;
 
             }
-            if (waitingToShoot && (System.currentTimeMillis() > TargetTime) )
-            {
+            if (waitingToShoot && (System.currentTimeMillis() > TargetTime)) {
                 robot.shotServo.setPosition(0.375);
                 pressingRT = true;
                 waitingToShoot = false;
-
 
 
             }
 
         }
     }
+
+    public void drive(double forward, double right, double rotate)
+    {
+
+
+        double frontLeftPower = forward + right + rotate;
+        double frontRightPower = forward - right - rotate;
+        double backRightPower = forward + right - rotate;
+        double backLeftPower = forward - right + rotate;
+
+        double max = Math.max(Math.abs(frontRightPower), Math.max(Math.abs(backLeftPower), Math.max(Math.abs(frontLeftPower), Math.abs(backRightPower))));
+        double scaleFactor;
+        if (max > 1) {
+            scaleFactor = 1 / max;
+        } else {
+            scaleFactor = 1;
+        }
+        scaleFactor *= Math.max(Math.abs(1 - gamepad1.right_trigger), 0.2);
+        robot.setPower((frontRightPower) * scaleFactor, (backRightPower) * scaleFactor, (backLeftPower) * scaleFactor, (frontLeftPower) * scaleFactor);
+
+
+
+
+
+    }
+
 
 }
 
