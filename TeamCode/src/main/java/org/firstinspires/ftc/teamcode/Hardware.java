@@ -42,38 +42,7 @@ public class Hardware {
         return myInstance;
     }
 
-    /*
-    public void init(HardwareMap hwMap) {
-        //time based: why is it bad? uses time, does not account for slippage
-        //encoder: what is it? counts ticks to get to position, slippage
-        //odometry: what is it? corrects position
-        //initialize motors
-        rf = hwMap.get(DcMotor.class, "rf");
-        rf.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        rf.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        rf.setPower(0);
 
-        lf = hwMap.get(DcMotor.class, "lf");
-        lf.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        lf.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        lf.setPower(0);
-
-        rb = hwMap.get(DcMotor.class, "rb");
-        rb.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        rb.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        rb.setPower(0);
-
-        lb = hwMap.get(DcMotor.class, "lb");
-        lb.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        lb.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        lb.setPower(0);
-
-        //initialize servo
-
-
-        demoServo = hwMap.get(Servo.class, "demoServo");
-    }
-    */
     public void init(HardwareMap hwMap) {
 
         rf = hwMap.get(DcMotorEx.class, "cm1");
@@ -123,10 +92,6 @@ public class Hardware {
 
     }
 
-
-    //reverse rf and fix lb hardware wise
-
-    //public void
 
 
 }
