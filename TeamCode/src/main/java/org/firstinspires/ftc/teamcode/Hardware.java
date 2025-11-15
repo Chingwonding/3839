@@ -48,28 +48,22 @@ public class Hardware {
         rf = hwMap.get(DcMotorEx.class, "cm1");
         rf.setDirection(DcMotorSimple.Direction.REVERSE);
         rf.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-//        rf.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         rf.setPower(0);
         //1
 
         rb = hwMap.get(DcMotorEx.class, "cm0");
         rb.setDirection(DcMotorSimple.Direction.REVERSE);
         rb.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-//        rb.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         rb.setPower(0);
         //3
 
         lf = hwMap.get(DcMotorEx.class, "em1");
         lf.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        //lf.setDirection(DcMotorSimple.Direction.REVERSE);
-//        lf.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         lf.setPower(0);
         //0
 
         lb = hwMap.get(DcMotorEx.class, "em2");
-        //lb.setDirection(DcMotorSimple.Direction.REVERSE);
         lb.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-//        lb.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         lb.setPower(0);
 
         //motor for shooting
@@ -82,7 +76,6 @@ public class Hardware {
 
         Servotwo = hwMap.get(Servo.class, "es2");
 
-        //Servothree = hwMap.get(Servo.class, "es0");
     }
 
     public void setPower(double fr, double br, double bl, double fl) {
