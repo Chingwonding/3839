@@ -15,10 +15,18 @@ public class Hardware {
     public DcMotor rb;
     public DcMotor lb;
 
+
+    //new shot motors for robot and one new servo
+    public DcMotor shotMotorOne;
+
+    public DcMotor shotMotorTwo;
+
     //intake motors and servo
 
 
     //motor for shooting
+
+    /*
     public DcMotor shotMotor;
     
     
@@ -29,6 +37,8 @@ public class Hardware {
     public Servo Servotwo;
 
     public Servo Servothree;
+
+     */
 
 
     public static double maxSpeed = 0.9;
@@ -45,6 +55,7 @@ public class Hardware {
 
     public void init(HardwareMap hwMap) {
 
+
         rf = hwMap.get(DcMotorEx.class, "cm1");
         rf.setDirection(DcMotorSimple.Direction.REVERSE);
         rf.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -57,6 +68,7 @@ public class Hardware {
         rb.setPower(0);
         //3
 
+
         lf = hwMap.get(DcMotorEx.class, "em1");
         lf.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         lf.setPower(0);
@@ -68,6 +80,8 @@ public class Hardware {
 
         //motor for shooting
         //I set it two em3 can change it later
+
+        /*
         shotMotor = hwMap.get(DcMotorEx.class, "em3");
         shotMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         shotMotor.setPower(0);
@@ -75,6 +89,18 @@ public class Hardware {
         shotServo = hwMap.get(Servo.class, "es1");
 
         Servotwo = hwMap.get(Servo.class, "es2");
+
+         */
+
+        shotMotorOne = hwMap.get(DcMotorEx.class, "cm3");
+        shotMotorOne.setDirection(DcMotorSimple.Direction.REVERSE);
+        shotMotorOne.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        shotMotorOne.setPower(0);
+
+
+        shotMotorTwo = hwMap.get(DcMotorEx.class, "em3");
+        shotMotorTwo.setZeroPowerBehavior((DcMotor.ZeroPowerBehavior.BRAKE));
+        shotMotorTwo.setPower(0);
 
     }
 

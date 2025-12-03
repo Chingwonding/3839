@@ -52,58 +52,27 @@ public class OdometryTeleOp extends LinearOpMode {
         waitForStart();
         while (opModeIsActive()) {
 
+            //for driving and strafing hopefully
             drive(-(Math.atan(5 * -gamepad1.left_stick_y) / Math.atan(5)), (Math.atan(5 * -gamepad1.left_stick_x) / Math.atan(5)), (Math.atan(5 * -gamepad1.right_stick_x) / Math.atan(5)) * 0.5);
 
-
-            if (gamepad1.x) {
+            if(gamepad1.x)
+            {
                 shotOrNah += 1;
                 if (shotOrNah % 2 == 0) {
-                    robot.shotMotor.setPower(1.0);
-
-                } else {
-                    //the motor gets turned off
-                    robot.shotMotor.setPower(0.0);
+                    robot.shotMotorOne.setPower(0.67);
+                    robot.shotMotorTwo.setPower(0.67);
+                }
+                else
+                {
+                    robot.shotMotorOne.setPower(0.67);
+                    robot.shotMotorTwo.setPower(0.67);
                 }
 
 
-            }
-            //robot.shotMotor.setPower(1.0);
-
-
-            //this is servotwo
-            if (gamepad1.b) {
-
-                upOrDown++;
-                if (upOrDown % 2 == 0) {
-                    robot.Servotwo.setPosition(0.998);
-                } else {
-                    robot.Servotwo.setPosition(0.360);
-                }
 
 
             }
 
-
-            //for servo that launches the ball towards the shooter
-            if (gamepad1.right_trigger > 0.1 && !pressingRT) {
-
-
-                robot.shotServo.setPosition(0.888);
-                waitingToShoot = true;
-                TargetTime = (long) (System.currentTimeMillis() + delay);
-
-
-            } else if (!(gamepad1.right_trigger > 0.1)) {
-                pressingRT = false;
-
-            }
-            if (waitingToShoot && (System.currentTimeMillis() > TargetTime)) {
-                robot.shotServo.setPosition(0.375);
-                pressingRT = true;
-                waitingToShoot = false;
-
-
-            }
 
         }
     }
