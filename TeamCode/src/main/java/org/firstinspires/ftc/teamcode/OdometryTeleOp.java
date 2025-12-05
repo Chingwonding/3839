@@ -46,6 +46,7 @@ public class OdometryTeleOp extends LinearOpMode {
 
         int upOrDown = 1;
         int shotOrNah = 1;
+        int servoCount = 1;
 
 
 
@@ -85,6 +86,19 @@ public class OdometryTeleOp extends LinearOpMode {
                     robot.intake.setPower(0);
                 }
 
+            }
+            
+            if (gamepad1.leftBumperWasPressed())
+            {
+                servoCount += 1;
+                if (servoCount % 2 == 0)
+                {
+                    robot.UpServo.setPosition(0.260);
+                }
+                else
+                {
+                    robot.UpServo.setPosition(0.400);
+                }
             }
 
 

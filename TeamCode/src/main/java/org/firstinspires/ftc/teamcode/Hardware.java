@@ -23,6 +23,8 @@ public class Hardware {
 
     public DcMotor shotMotorTwo;
 
+
+    public Servo UpServo;
     //intake motors and servo
 
 
@@ -94,6 +96,8 @@ public class Hardware {
 
          */
 
+
+
         shotMotorOne = hwMap.get(DcMotorEx.class, "cm3");
         shotMotorOne.setDirection(DcMotorSimple.Direction.REVERSE);
         shotMotorOne.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -108,6 +112,9 @@ public class Hardware {
         intake.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         intake.setPower(0);
         //0
+
+        //servos
+        UpServo = hwMap.get(Servo.class, "cm0");
 
     }
 
