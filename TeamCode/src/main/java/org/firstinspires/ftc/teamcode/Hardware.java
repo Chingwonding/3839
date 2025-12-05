@@ -114,7 +114,7 @@ public class Hardware {
         //0
 
         //servos
-        UpServo = hwMap.get(Servo.class, "cm0");
+        UpServo = hwMap.get(Servo.class, "s1");
 
     }
 

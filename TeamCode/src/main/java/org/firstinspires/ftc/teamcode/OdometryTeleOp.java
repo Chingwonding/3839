@@ -60,8 +60,8 @@ public class OdometryTeleOp extends LinearOpMode {
             {
                 shotOrNah += 1;
                 if (shotOrNah % 2 == 0) {
-                    robot.shotMotorOne.setPower(0.67);
-                    robot.shotMotorTwo.setPower(0.67);
+                    robot.shotMotorOne.setPower(0.99);
+                    robot.shotMotorTwo.setPower(0.99);
                 }
                 else
                 {
@@ -87,8 +87,8 @@ public class OdometryTeleOp extends LinearOpMode {
                 }
 
             }
-            
-            if (gamepad1.leftBumperWasPressed())
+
+            if (gamepad1.b)
             {
                 servoCount += 1;
                 if (servoCount % 2 == 0)
