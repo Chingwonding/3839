@@ -16,6 +16,8 @@ public class Hardware {
     public DcMotor lb;
 
 
+    public DcMotor intake;
+
     //new shot motors for robot and one new servo
     public DcMotor shotMotorOne;
 
@@ -101,6 +103,11 @@ public class Hardware {
         shotMotorTwo = hwMap.get(DcMotorEx.class, "em3");
         shotMotorTwo.setZeroPowerBehavior((DcMotor.ZeroPowerBehavior.BRAKE));
         shotMotorTwo.setPower(0);
+
+        intake = hwMap.get(DcMotorEx.class, "cm2");
+        intake.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        intake.setPower(0);
+        //0
 
     }
 

@@ -64,12 +64,26 @@ public class OdometryTeleOp extends LinearOpMode {
                 }
                 else
                 {
-                    robot.shotMotorOne.setPower(0.67);
-                    robot.shotMotorTwo.setPower(0.67);
+                    robot.shotMotorOne.setPower(0);
+                    robot.shotMotorTwo.setPower(0);
                 }
 
 
 
+
+            }
+            if (gamepad1.y)
+            {
+                upOrDown += 1;
+                if (upOrDown % 2 == 0)
+                {
+                    robot.intake.setPower(0.99);
+
+                }
+                else
+                {
+                    robot.intake.setPower(0);
+                }
 
             }
 
