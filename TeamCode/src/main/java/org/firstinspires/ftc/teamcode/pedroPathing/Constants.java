@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.pedroPathing;
 
+import com.pedropathing.control.FilteredPIDFCoefficients;
 import com.pedropathing.control.PIDFCoefficients;
 import com.pedropathing.follower.Follower;
 import com.pedropathing.follower.FollowerConstants;
@@ -19,8 +20,10 @@ public class Constants {
             .mass(11.6).forwardZeroPowerAcceleration(-22.999)
             .lateralZeroPowerAcceleration(-41.111)
             .translationalPIDFCoefficients(new PIDFCoefficients(0.0001, 0,0.1,0.03))
-            .headingPIDFCoefficients(new PIDFCoefficients(0.2, 0, 0.03, 0));
-            //.drivePIDFCoefficients(new PIDFCoefficients());
+            .headingPIDFCoefficients(new PIDFCoefficients(0.2, 0, 0.03, 0))
+            .drivePIDFCoefficients(new FilteredPIDFCoefficients(0.025, 0, 0.00001, 0.6, 0.01))
+            .centripetalScaling(0.0005);
+
 
     //change mass later and must be in kg
 
