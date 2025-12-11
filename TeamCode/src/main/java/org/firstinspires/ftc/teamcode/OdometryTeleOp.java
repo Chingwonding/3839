@@ -60,8 +60,8 @@ public class OdometryTeleOp extends LinearOpMode {
             {
                 shotOrNah += 1;
                 if (shotOrNah % 2 == 0) {
-                    robot.shotMotorOne.setPower(0.99);
-                    robot.shotMotorTwo.setPower(0.99);
+                    robot.shotMotorOne.setPower(0.60);
+                    robot.shotMotorTwo.setPower(0.60);
                 }
                 else
                 {
@@ -93,11 +93,11 @@ public class OdometryTeleOp extends LinearOpMode {
                 servoCount += 1;
                 if (servoCount % 2 == 0)
                 {
-                    robot.UpServo.setPosition(0.260);
+                    robot.UpServo.setPosition(0.428);
                 }
                 else
                 {
-                    robot.UpServo.setPosition(0.400);
+                    robot.UpServo.setPosition(0.593);
                 }
             }
 
