@@ -60,8 +60,8 @@ public class OdometryTeleOp extends LinearOpMode {
             {
                 shotOrNah += 1;
                 if (shotOrNah % 2 == 0) {
-                    robot.shotMotorOne.setPower(0.60);
-                    robot.shotMotorTwo.setPower(0.60);
+                    robot.shotMotorOne.setPower(0.99);
+                    robot.shotMotorTwo.setPower(0.99);
                 }
                 else
                 {

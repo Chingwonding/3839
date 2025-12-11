@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.pedroPathing;
 
+import com.pedropathing.control.PIDFCoefficients;
 import com.pedropathing.follower.Follower;
 import com.pedropathing.follower.FollowerConstants;
 import com.pedropathing.ftc.FollowerBuilder;
@@ -14,7 +15,12 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 public class Constants {
-    public static FollowerConstants followerConstants = new FollowerConstants().mass(10).forwardZeroPowerAcceleration(-22.999).lateralZeroPowerAcceleration(-41.111);
+    public static FollowerConstants followerConstants = new FollowerConstants()
+            .mass(10).forwardZeroPowerAcceleration(-22.999)
+            .lateralZeroPowerAcceleration(-41.111)
+            .translationalPIDFCoefficients(new PIDFCoefficients(0.0001, 0,0.1,0.03))
+            .headingPIDFCoefficients(new PIDFCoefficients(0.2, 0, 0.03, 0));
+            //.drivePIDFCoefficients(new PIDFCoefficients());
     //change mass later and must be in kg
 
     public static PathConstraints pathConstraints = new PathConstraints(0.99, 100, 1, 1);
