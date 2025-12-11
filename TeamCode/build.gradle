@@ -25,4 +25,6 @@ android {
 
 dependencies {
     implementation project(':FtcRobotController')
+
+    implementation 'com.pedropathing:pedro-pathing:1.0.6'
 }
