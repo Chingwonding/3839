@@ -56,12 +56,12 @@ public class OdometryTeleOp extends LinearOpMode {
             //for driving and strafing hopefully
             drive(-(Math.atan(5 * -gamepad1.left_stick_y) / Math.atan(5)), (Math.atan(5 * -gamepad1.left_stick_x) / Math.atan(5)), (Math.atan(5 * -gamepad1.right_stick_x) / Math.atan(5)) * 0.5);
 
-            if(gamepad1.x)
+            if(gamepad1.y)
             {
                 shotOrNah += 1;
                 if (shotOrNah % 2 == 0) {
-                    robot.shotMotorOne.setPower(0.99);
-                    robot.shotMotorTwo.setPower(0.99);
+                    robot.shotMotorOne.setPower(0.8);
+                    robot.shotMotorTwo.setPower(0.8);
                 }
                 else
                 {
@@ -73,7 +73,7 @@ public class OdometryTeleOp extends LinearOpMode {
 
 
             }
-            if (gamepad1.y)
+            if (gamepad1.x)
             {
                 upOrDown += 1;
                 if (upOrDown % 2 == 0)
@@ -88,18 +88,23 @@ public class OdometryTeleOp extends LinearOpMode {
 
             }
 
-            if (gamepad1.b)
+            if (gamepad1.right_bumper)
             {
-                servoCount += 1;
+                /*servoCount += 1;
                 if (servoCount % 2 == 0)
                 {
-                    robot.UpServo.setPosition(0.428);
+
                 }
                 else
                 {
                     robot.UpServo.setPosition(0.593);
                 }
+
+                 */
+                robot.UpServo.setPosition(0.428);
             }
+
+            robot.UpServo.setPosition(0.593);
 
 
         }
