@@ -72,11 +72,11 @@ public class AnotherAuto extends OpMode {
         scoreLoad.setLinearHeadingInterpolation(startPose.getHeading(), beforePickUp1.getHeading());
 
 
+        `
         
 
 
         /*
-
 
          This is our scorePreload path. We are using a BezierLine, which is a straight line.
         scorePreload = new Path(new BezierLine(startPose, scorePose));
