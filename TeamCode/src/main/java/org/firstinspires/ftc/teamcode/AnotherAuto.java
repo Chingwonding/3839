@@ -71,9 +71,9 @@ public class AnotherAuto extends OpMode {
         scoreLoad = new Path(new BezierLine(startPose, beforePickUp1));
         scoreLoad.setLinearHeadingInterpolation(startPose.getHeading(), beforePickUp1.getHeading());
 
-        beforeAfterOne =follower.pathBuilder();
-        .addPath(new BezierLine(startPose, beforeAfterOne));
-        scorePreload.setLinearHeadingInterpolation(startPose.getHeading(), scorePose.getHeading());
+
+        
+
 
         /*
 
