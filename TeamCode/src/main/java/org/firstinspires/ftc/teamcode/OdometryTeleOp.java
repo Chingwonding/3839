@@ -56,12 +56,15 @@ public class OdometryTeleOp extends LinearOpMode {
             //for driving and strafing hopefully
             drive(-(Math.atan(5 * -gamepad1.left_stick_y) / Math.atan(5)), (Math.atan(5 * -gamepad1.left_stick_x) / Math.atan(5)), (Math.atan(5 * -gamepad1.right_stick_x) / Math.atan(5)) * 0.5);
 
-            if(gamepad1.y)
+
+
+            if(gamepad1.rightBumperWasPressed())
             {
                 shotOrNah += 1;
                 if (shotOrNah % 2 == 0) {
-                    robot.shotMotorOne.setPower(0.8);
-                    robot.shotMotorTwo.setPower(0.8);
+                    robot.shotMotorOne.setVelocity(0.75 * 6000 * 28 / 60);
+                    robot.shotMotorTwo.setVelocity(0.75 * 6000 * 28 / 60);
+
                 }
                 else
                 {

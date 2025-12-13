@@ -23,7 +23,7 @@ public class AnotherAuto extends OpMode {
     private Follower follower;
     private Timer pathTimer, actionTimer, opmodeTimer;
 
-    private int pathState;
+    //private int pathState;
 
     private final Pose startPose = new Pose(120, -120, 90);
 
@@ -72,9 +72,6 @@ public class AnotherAuto extends OpMode {
         scoreLoad.setLinearHeadingInterpolation(startPose.getHeading(), beforePickUp1.getHeading());
 
 
-        `
-        
-
 
         /*
 
@@ -99,6 +96,14 @@ public class AnotherAuto extends OpMode {
 
 
 
+    }
+
+
+    //enums or states of the robot
+    enum pathState
+    {
+        followingPath,
+        completed,
     }
 
     public void autonomousPathUpdate() {

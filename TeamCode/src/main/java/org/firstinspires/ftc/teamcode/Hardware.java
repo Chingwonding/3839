@@ -16,12 +16,15 @@ public class Hardware {
     public DcMotor lb;
 
 
+
+
+
     public DcMotor intake;
 
     //new shot motors for robot and one new servo
-    public DcMotor shotMotorOne;
+    public DcMotorEx shotMotorOne;
 
-    public DcMotor shotMotorTwo;
+    public DcMotorEx shotMotorTwo;
 
 
     public Servo UpServo;
@@ -99,12 +102,17 @@ public class Hardware {
 
 
         shotMotorOne = hwMap.get(DcMotorEx.class, "cm3");
+
+        shotMotorOne.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         shotMotorOne.setDirection(DcMotorSimple.Direction.REVERSE);
+        shotMotorOne.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         shotMotorOne.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         shotMotorOne.setPower(0);
 
 
         shotMotorTwo = hwMap.get(DcMotorEx.class, "em3");
+        shotMotorTwo.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        shotMotorTwo.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         shotMotorTwo.setZeroPowerBehavior((DcMotor.ZeroPowerBehavior.BRAKE));
         shotMotorTwo.setPower(0);
 
