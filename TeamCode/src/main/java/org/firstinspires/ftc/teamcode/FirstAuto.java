@@ -20,9 +20,9 @@ public class FirstAuto extends LinearOpMode {
 
         waitForStart();
         // essentially the main method
-        move(20, 0.67);
-        move(3, 0.67);
-        turning(800,0.2);
+        move(7.5, 0.67);
+
+
     }
     //we can use telemetry for now?
     public void move(double distance, double speed){

@@ -63,7 +63,9 @@ public class OdometryTeleOp extends LinearOpMode {
         while (opModeIsActive()) {
 
             //for driving and strafing hopefully
-            drive(-(Math.atan(5 * -gamepad1.left_stick_y) / Math.atan(5)), (Math.atan(5 * -gamepad1.left_stick_x) / Math.atan(5)), (Math.atan(5 * -gamepad1.right_stick_x) / Math.atan(5)) * 0.5);
+            drive(-(Math.atan(5 * -gamepad1.left_stick_y) / Math.atan(5)),
+                    (Math.atan(5 * -gamepad1.left_stick_x) / Math.atan(5)),
+                    (Math.atan(5 * -gamepad1.right_stick_x) / Math.atan(5)) * 0.8);
 
 
 
@@ -90,7 +92,7 @@ public class OdometryTeleOp extends LinearOpMode {
 
 
             }
-            if (gamepad1.x)
+            if (gamepad1.xWasPressed())
             {
                 upOrDown += 1;
                 if (upOrDown % 2 == 0)
@@ -123,13 +125,42 @@ public class OdometryTeleOp extends LinearOpMode {
 
                 servoCount2 += 1;
                 if(servoCount2 % 2 == 0) {
-                    robot.servoTwo.setPosition(0.3);
+                    robot.servoTwo.setPosition(0.4);
 
 
                 }
                 else
                 {
-                    robot.servoTwo.setPosition(0.1);
+                    robot.servoTwo.setPosition(0.65);
+                }
+
+            }
+            if (gamepad2.xWasPressed())
+            {
+                upOrDown += 1;
+                if (upOrDown % 2 == 0)
+                {
+                    robot.intake.setPower(0.99);
+
+                }
+                else
+                {
+                    robot.intake.setPower(0);
+                }
+
+            }
+            if(gamepad2.aWasPressed())
+            {
+
+                servoCount2 += 1;
+                if(servoCount2 % 2 == 0) {
+                    robot.servoTwo.setPosition(0.4);
+
+
+                }
+                else
+                {
+                    robot.servoTwo.setPosition(0.65);
                 }
 
             }
