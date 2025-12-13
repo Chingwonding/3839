@@ -41,6 +41,8 @@ public class ServoTester extends LinearOpMode {
                 pressingA = false;
             }
 
+
+
             if (gamepad1.b && !pressingB) {
                 position -= 0.05;
                 pressingB = true;
