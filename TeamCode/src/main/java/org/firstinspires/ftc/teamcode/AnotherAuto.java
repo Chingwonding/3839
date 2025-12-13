@@ -192,7 +192,7 @@ hello
                     /* Grab Sample */
 
                     /* Since this is a pathChain, we can have Pedro hold the end point while we are scoring the sample */
-                    follower.followPath(scorePickup1, true);
+                    //follower.followPath(scorePickup1, true);
                     setPathState(3);
                 }
                 break;
@@ -202,7 +202,7 @@ hello
                     /* Score Sample */
 
                     /* Since this is a pathChain, we can have Pedro hold the end point while we are grabbing the sample */
-                    follower.followPath(grabPickup2, true);
+                    //follower.followPath(grabPickup2, true);
                     setPathState(4);
                 }
                 break;
@@ -212,7 +212,7 @@ hello
                     /* Grab Sample */
 
                     /* Since this is a pathChain, we can have Pedro hold the end point while we are scoring the sample */
-                    follower.followPath(scorePickup2, true);
+                    //follower.followPath(scorePickup2, true);
                     setPathState(5);
                 }
                 break;
@@ -222,7 +222,7 @@ hello
                     /* Score Sample */
 
                     /* Since this is a pathChain, we can have Pedro hold the end point while we are grabbing the sample */
-                    follower.followPath(grabPickup3, true);
+                    //follower.followPath(grabPickup3, true);
                     setPathState(6);
                 }
                 break;
@@ -232,7 +232,7 @@ hello
                     /* Grab Sample */
 
                     /* Since this is a pathChain, we can have Pedro hold the end point while we are scoring the sample */
-                    follower.followPath(scorePickup3, true);
+                    //follower.followPath(scorePickup3, true);
                     setPathState(7);
                 }
                 break;
