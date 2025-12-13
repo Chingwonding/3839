@@ -28,6 +28,8 @@ public class Hardware {
 
 
     public Servo UpServo;
+
+    public Servo servoTwo;
     //intake motors and servo
 
 
@@ -123,6 +125,8 @@ public class Hardware {
 
         //servos
         UpServo = hwMap.get(Servo.class, "s1");
+
+        UpServo = hwMap.get(Servo.class, "s0");
 
     }
 

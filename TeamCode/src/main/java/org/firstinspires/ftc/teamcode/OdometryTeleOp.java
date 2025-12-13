@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
 
+import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -9,6 +10,8 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
+
+
 //let me try to beautify this whole thing so its more readable
 
 
@@ -19,8 +22,9 @@ public class OdometryTeleOp extends LinearOpMode {
     private ElapsedTime runtime = new ElapsedTime();
 
 
+    Timer timer = new Timer();
     Hardware robot = Hardware.getInstance();
-
+    boolean robotServo;
 
     //main run method
     public void runOpMode() {
@@ -30,6 +34,7 @@ public class OdometryTeleOp extends LinearOpMode {
         double forward, sideways, turning, max;
         double scaleFactor = 0.8;
 
+        //int delay = 500;
 
         robot.init(hardwareMap);
         //always add telemetry.update() to make sure telemetry runs repeatedly
@@ -40,7 +45,6 @@ public class OdometryTeleOp extends LinearOpMode {
         //for the servo that puts the ball up near the wheel
         boolean shot = true;
         boolean waitingToShoot = false;
-        int delay = 1000;
         long TargetTime = 0;
         boolean pressingRT = false;
 
@@ -62,8 +66,8 @@ public class OdometryTeleOp extends LinearOpMode {
             {
                 shotOrNah += 1;
                 if (shotOrNah % 2 == 0) {
-                    robot.shotMotorOne.setVelocity(0.75 * 6000 * 28 / 60);
-                    robot.shotMotorTwo.setVelocity(0.75 * 6000 * 28 / 60);
+                    robot.shotMotorOne.setVelocity(0.65 * 6000 * 28 / 60);
+                    robot.shotMotorTwo.setVelocity(0.65 * 6000 * 28 / 60);
 
                 }
                 else
@@ -91,23 +95,21 @@ public class OdometryTeleOp extends LinearOpMode {
 
             }
 
-            if (gamepad1.right_bumper)
+            if (gamepad1.rightBumperWasPressed())
             {
-                /*servoCount += 1;
-                if (servoCount % 2 == 0)
-                {
-
-                }
-                else
-                {
-                    robot.UpServo.setPosition(0.593);
-                }
-
-                 */
+                robotServo = true;
                 robot.UpServo.setPosition(0.428);
+                timer.resetTimer();
             }
 
-            robot.UpServo.setPosition(0.593);
+            if (robotServo && timer.getElapsedTimeSeconds() > 0.5) {
+                robotServo = false;
+                robot.UpServo.setPosition(0.593);
+
+            }
+
+
+
 
 
         }

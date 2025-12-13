@@ -20,7 +20,7 @@ public class FirstAuto extends LinearOpMode {
 
         waitForStart();
         // essentially the main method
-        move(6, 0.67);
+        move(20, 0.67);
         move(3, 0.67);
         turning(800,0.2);
     }
