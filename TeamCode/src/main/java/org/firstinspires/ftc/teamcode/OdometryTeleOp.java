@@ -75,7 +75,7 @@ public class OdometryTeleOp extends LinearOpMode {
                 if (shotOrNah % 2 == 0) {
 
 
-                    velocity = 0.65 * 6000 * 28 / 60;
+                    velocity = 0.625 * 6000 * 28 / 60;
                     robot.shotMotorOne.setVelocity(velocity);
                     robot.shotMotorTwo.setVelocity(velocity);
                     telemetry.addData("shot power: ", velocity);
@@ -131,7 +131,7 @@ public class OdometryTeleOp extends LinearOpMode {
                 }
                 else
                 {
-                    robot.servoTwo.setPosition(0.65);
+//                    robot.servoTwo.setPosition(0.65);
                 }
 
             }
