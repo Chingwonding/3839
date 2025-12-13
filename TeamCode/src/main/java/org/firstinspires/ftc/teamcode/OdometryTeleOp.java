@@ -52,7 +52,7 @@ public class OdometryTeleOp extends LinearOpMode {
         int shotOrNah = 1;
         int servoCount = 1;
 
-
+        double velocity;
 
         waitForStart();
         while (opModeIsActive()) {
@@ -66,8 +66,13 @@ public class OdometryTeleOp extends LinearOpMode {
             {
                 shotOrNah += 1;
                 if (shotOrNah % 2 == 0) {
-                    robot.shotMotorOne.setVelocity(0.65 * 6000 * 28 / 60);
-                    robot.shotMotorTwo.setVelocity(0.65 * 6000 * 28 / 60);
+
+
+                    velocity = 0.65 * 6000 * 28 / 60;
+                    robot.shotMotorOne.setVelocity(velocity);
+                    robot.shotMotorTwo.setVelocity(velocity);
+                    telemetry.addData("shot power: ", velocity);
+                    telemetry.update();
 
                 }
                 else
