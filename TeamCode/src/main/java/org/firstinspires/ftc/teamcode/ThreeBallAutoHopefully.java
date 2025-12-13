@@ -23,8 +23,8 @@ public class ThreeBallAutoHopefully extends OpMode {
     private int shootingState = 0;
     private int shotsCompleted = 0;
 
-    private final Pose initialpose = new Pose(155.91, 130.31, -2.24);
-    private final Pose finalpose = new Pose(120.64, 107.027, -0.002);
+    private final Pose initialpose = new Pose(155.91, 130.31, Math.toRadians(45));
+    private final Pose finalpose = new Pose(120.64, 107.027, Math.toRadians(45));
 
     private Path threeballpath;
 
@@ -149,6 +149,9 @@ public class ThreeBallAutoHopefully extends OpMode {
             case 3: // State 3: Wait 0.5s, then decide to loop or finish
                 if (pathTimer.getElapsedTimeSeconds() > 0.5) {
                     if (shotsCompleted < 3) {
+                        robot.UpServo.setPosition(SERVO_UP_POSITION);
+                        robot.shotMotorOne.setPower(0);
+                        robot.shotMotorTwo.setPower(0);
                         shootingState = 1; // Loop back for the next shot
                         pathTimer.resetTimer();
                     } else {
