@@ -71,6 +71,45 @@ public class AnotherAuto extends OpMode {
         scoreLoad = new Path(new BezierLine(startPose, beforePickUp1));
         scoreLoad.setLinearHeadingInterpolation(startPose.getHeading(), beforePickUp1.getHeading());
 
+        beforeAfterOne = follower.pathBuilder()
+                .addPath(new BezierLine(beforePickUp1, afterPickUp1))
+                .setLinearHeadingInterpolation(beforePickUp1.getHeading(), afterPickUp1.getHeading())
+                .build();
+        AfterBeforeOne = follower.pathBuilder()
+                .addPath(new BezierLine(afterPickUp1, beforePickUp1))
+                .setLinearHeadingInterpolation(afterPickUp1.getHeading(), shotPosition.getHeading())
+                .build();
+        ShotSequenceOne = follower.pathBuilder()
+                .addPath(new BezierLine(shotPosition,beforePickUp2))
+                .setLinearHeadingInterpolation(shotPosition.getHeading(), beforePickUp2.getHeading())
+                .build();
+        beforeAfterTwo = follower.pathBuilder()
+                .addPath(new BezierLine(beforePickUp2,afterPickUp2))
+                .setLinearHeadingInterpolation(beforePickUp2.getHeading(), afterPickUp2.getHeading())
+                .build();
+        AfterBeforeTwo = follower.pathBuilder()
+                .addPath(new BezierLine(afterPickUp2,beforePickUp2))
+                .setLinearHeadingInterpolation(afterPickUp2.getHeading(), beforePickUp2.getHeading())
+                .build();
+        ShotSequenceTwo = follower.pathBuilder()
+                .addPath(new BezierLine(beforePickUp2,shotPosition))
+                .setLinearHeadingInterpolation(beforePickUp2.getHeading(), shotPosition.getHeading())
+                .build();
+        beforeAfterThree = follower.pathBuilder()
+                .addPath(new BezierLine(beforePickUp3,afterPickUp3))
+                .setLinearHeadingInterpolation(beforePickUp3.getHeading(), afterPickUp3.getHeading())
+                .build();
+        AfterBeforeThree = follower.pathBuilder()
+                .addPath(new BezierLine(afterPickUp3,beforePickUp3))
+                .setLinearHeadingInterpolation(afterPickUp3.getHeading(), beforePickUp3.getHeading())
+                .build();
+        ShotSequenceThree = follower.pathBuilder()
+                .addPath(new BezierLine(beforePickUp3,shotPosition))
+                .setLinearHeadingInterpolation(beforePickUp3.getHeading(), shotPosition.getHeading())
+                .build();
+
+
+
 
         
 
@@ -100,6 +139,7 @@ public class AnotherAuto extends OpMode {
 
 
     }
+
 
     public void autonomousPathUpdate() {
         switch (pathState) {
