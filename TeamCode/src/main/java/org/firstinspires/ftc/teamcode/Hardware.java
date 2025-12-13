@@ -124,9 +124,9 @@ public class Hardware {
         //0
 
         //servos
-        UpServo = hwMap.get(Servo.class, "s1");
-
         UpServo = hwMap.get(Servo.class, "s0");
+
+        servoTwo = hwMap.get(Servo.class, "s1");
 
     }
 

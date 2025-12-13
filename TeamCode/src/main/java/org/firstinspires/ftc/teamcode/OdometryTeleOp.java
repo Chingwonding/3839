@@ -48,9 +48,14 @@ public class OdometryTeleOp extends LinearOpMode {
         long TargetTime = 0;
         boolean pressingRT = false;
 
+
+
         int upOrDown = 1;
         int shotOrNah = 1;
         int servoCount = 1;
+        int servoCount2 = 1;
+
+
 
         double velocity;
 
@@ -112,6 +117,24 @@ public class OdometryTeleOp extends LinearOpMode {
                 robot.UpServo.setPosition(0.593);
 
             }
+
+            if(gamepad1.a)
+            {
+
+                servoCount2 += 1;
+                if(servoCount2 % 2 == 0) {
+                    robot.servoTwo.setPosition(0.3);
+
+
+                }
+                else
+                {
+                    robot.servoTwo.setPosition(0.1);
+                }
+
+            }
+
+
 
 
 
