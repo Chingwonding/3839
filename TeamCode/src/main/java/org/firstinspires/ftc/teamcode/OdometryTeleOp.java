@@ -58,7 +58,7 @@ public class OdometryTeleOp extends LinearOpMode {
 
 
 
-            if(gamepad1.rightBumperWasPressed())
+            if(gamepad1.leftBumperWasPressed())
             {
                 shotOrNah += 1;
                 if (shotOrNah % 2 == 0) {
