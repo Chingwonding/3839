@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 @Autonomous(name = "Auto")
-public class FirstAuto extends LinearOpMode {
+public class BummyAuto extends LinearOpMode {
 
 
     Hardware robot = Hardware.getInstance();
@@ -21,6 +21,7 @@ public class FirstAuto extends LinearOpMode {
         waitForStart();
         // essentially the main method
         move(7.5, 0.67);
+        turning(180, 0.2);
 
     }
     //we can use telemetry for now?
