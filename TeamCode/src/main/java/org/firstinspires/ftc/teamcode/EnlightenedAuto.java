@@ -15,6 +15,9 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
 
+
+
+
 @Autonomous(name = "Enlightenment Auto", group = "Examples")
 //public class EnlightenedAuto extends OpMode {
 public class EnlightenedAuto extends OpMode {
@@ -61,7 +64,7 @@ public class EnlightenedAuto extends OpMode {
     private Path EnlightenedAuto;
     private PathChain one,two,three,four,five,six,seven,eight,nine,ten,eleven,twelve;
 
-
+        //building paths
 
     @Override
     public void init() {
