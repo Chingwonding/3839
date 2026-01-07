@@ -165,18 +165,18 @@ public class EnlightenedAuto extends OpMode {
                 break;
 
             case 1: // State 1: Move servo UP
-                robot.UpServo.setPosition(SERVO_UP_POSITION);
+                //robot.UpServo.setPosition(SERVO_UP_POSITION);
                 shootingState = 2; // Move to next state (wait)
                 pathTimer.resetTimer();
 
-                robot.servoTwo.setPosition(0.4);
+                //robot.servoTwo.setPosition(0.4);
                 break;
 
             case 2: // State 2: Wait 0.5s, then move servo DOWN
                 if (pathTimer.getElapsedTimeSeconds() > 0.5) {
-                    robot.UpServo.setPosition(SERVO_DOWN_POSITION);
+                    //robot.UpServo.setPosition(SERVO_DOWN_POSITION);
                     shotsCompleted++;
-                    robot.servoTwo.setPosition(0.65);
+                    //robot.servoTwo.setPosition(0.65);
                     shootingState = 3; // Move to next state (wait)
                     pathTimer.resetTimer();
                 }
@@ -185,7 +185,7 @@ public class EnlightenedAuto extends OpMode {
             case 3: // State 3: Wait 0.5s, then decide to loop or finish
                 if (pathTimer.getElapsedTimeSeconds() > 0.5) {
                     if (shotsCompleted < 3) {
-                        robot.UpServo.setPosition(SERVO_UP_POSITION);
+                        //robot.UpServo.setPosition(SERVO_UP_POSITION);
                         robot.shotMotorOne.setPower(0);
                         robot.shotMotorTwo.setPower(0);
                         shootingState = 1; // Loop back for the next shot

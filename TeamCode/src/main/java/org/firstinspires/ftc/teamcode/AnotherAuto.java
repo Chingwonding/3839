@@ -187,7 +187,7 @@ public class AnotherAuto extends OpMode {
     public void readyToShoot() {
         robot.shotMotorOne.setPower(0.7);
         robot.shotMotorTwo.setPower(0.7);
-        robot.UpServo.setPosition(0.428);
+        //robot.UpServo.setPosition(0.428);
     }
 
     // It would be a good idea to add other action methods like these:

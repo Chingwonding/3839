@@ -27,9 +27,9 @@ public class Hardware {
     public DcMotorEx shotMotorTwo;
 
 
-    public Servo UpServo;
+    //public Servo UpServo;
 
-    public Servo servoTwo;
+    //public Servo servoTwo;
     //intake motors and servo
 
 
@@ -100,6 +100,9 @@ public class Hardware {
         Servotwo = hwMap.get(Servo.class, "es2");
 
          */
+        intake = hwMap.get(DcMotorEx.class, "em0");
+        intake.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        intake.setPower(0);
 
 
 
@@ -118,15 +121,13 @@ public class Hardware {
         shotMotorTwo.setZeroPowerBehavior((DcMotor.ZeroPowerBehavior.BRAKE));
         shotMotorTwo.setPower(0);
 
-        intake = hwMap.get(DcMotorEx.class, "cm2");
-        intake.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        intake.setPower(0);
+
         //0
 
         //servos
-        UpServo = hwMap.get(Servo.class, "s0");
+        //UpServo = hwMap.get(Servo.class, "s0");
 
-        servoTwo = hwMap.get(Servo.class, "s1");
+        //servoTwo = hwMap.get(Servo.class, "s1");
 
     }
 

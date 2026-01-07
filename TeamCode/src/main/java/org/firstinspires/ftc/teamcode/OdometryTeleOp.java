@@ -5,7 +5,6 @@ import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -76,10 +75,7 @@ public class OdometryTeleOp extends LinearOpMode {
 
 
                     velocity = 0.625 * 6000 * 28 / 60;
-                    robot.shotMotorOne.setVelocity(velocity);
-                    robot.shotMotorTwo.setVelocity(velocity);
-                    telemetry.addData("shot power: ", velocity);
-                    telemetry.update();
+
 
                 }
                 else
@@ -110,13 +106,13 @@ public class OdometryTeleOp extends LinearOpMode {
             if (gamepad1.rightBumperWasPressed())
             {
                 robotServo = true;
-                robot.UpServo.setPosition(0.428);
+                //robot.UpServo.setPosition(0.428);
                 timer.resetTimer();
             }
 
             if (robotServo && timer.getElapsedTimeSeconds() > 0.5) {
                 robotServo = false;
-                robot.UpServo.setPosition(0.593);
+                //robot.UpServo.setPosition(0.593);
 
             }
 
@@ -125,7 +121,7 @@ public class OdometryTeleOp extends LinearOpMode {
 
                 servoCount2 += 1;
                 if(servoCount2 % 2 == 0) {
-                    robot.servoTwo.setPosition(0.4);
+                    //robot.servoTwo.setPosition(0.4);
 
 
                 }
@@ -154,13 +150,13 @@ public class OdometryTeleOp extends LinearOpMode {
 
                 servoCount2 += 1;
                 if(servoCount2 % 2 == 0) {
-                    robot.servoTwo.setPosition(0.4);
+                    //robot.servoTwo.setPosition(0.4);
 
 
                 }
                 else
                 {
-                    robot.servoTwo.setPosition(0.65);
+                    //robot.servoTwo.setPosition(0.65);
                 }
 
             }
