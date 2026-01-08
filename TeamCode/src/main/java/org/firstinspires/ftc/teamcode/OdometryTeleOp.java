@@ -60,7 +60,7 @@ public class OdometryTeleOp extends LinearOpMode {
         waitForStart();
         while (opModeIsActive()) {
 
-            //for driving and strafing hopefully
+            //for driving and strafing, hopefully
             drive(-(Math.atan(5 * -gamepad1.left_stick_y) / Math.atan(5)),
                     (Math.atan(5 * -gamepad1.left_stick_x) / Math.atan(5)),
                     (Math.atan(5 * -gamepad1.right_stick_x) / Math.atan(5)) * 0.8);
@@ -115,8 +115,8 @@ public class OdometryTeleOp extends LinearOpMode {
             //above is an example of how to set something into a certain position for a certain amount
             // of time before automatically readjusting
 
-            if (gamepad2.right_bumper())
-            {)
+            if (gamepad2.right_bumper)
+
             {
                 upOrDown += 1;
                 if (upOrDown % 2 == 0)
