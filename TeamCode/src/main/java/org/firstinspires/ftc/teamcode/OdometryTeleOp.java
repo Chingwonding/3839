@@ -96,22 +96,30 @@ public class OdometryTeleOp extends LinearOpMode {
 
 
 
-            /*
-            if (gamepad1.rightBumperWasPressed())
+        //first servo
+            if (gamepad1.leftBumperWasPressed())
             {
-                //robotServo = true;
-                //robot.UpServo.setPosition(0.428);
+                robotServo = true;
+                robot.gatekeepTwo.setPosition(0.807);
+                robot.gatekeepOne.setPosition(0.359);
                 timer.resetTimer();
             }
 
 
             if (robotServo && timer.getElapsedTimeSeconds() > 0.5) {
                 robotServo = false;
-                //robot.UpServo.setPosition(0.593);
+                robot.gatekeepOne.setPosition(0.711);
+                robot.gatekeepTwo.setPosition(0.463);
+
 
             }
 
-             */
+
+
+
+
+
+
             //above is an example of how to set something into a certain position for a certain amount
             // of time before automatically readjusting
 
