@@ -5,6 +5,7 @@ import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -68,13 +69,19 @@ public class OdometryTeleOp extends LinearOpMode {
 
 
 
-            if(gamepad1.leftBumperWasPressed())
+            if(gamepad1.right_trigger > 0.01)
             {
                 shotOrNah += 1;
                 if (shotOrNah % 2 == 0) {
 
 
                     velocity = 0.625 * 6000 * 28 / 60;
+                    robot.shotMotorOne.setPower(velocity);
+                    robot.shotMotorTwo.setPower(velocity);
+
+                    telemetry.addData("Velocity", velocity);
+                    telemetry.update();
+
 
 
                 }
@@ -88,6 +95,8 @@ public class OdometryTeleOp extends LinearOpMode {
 
 
             }
+
+            /*
             if (gamepad1.xWasPressed())
             {
                 upOrDown += 1;
@@ -103,12 +112,16 @@ public class OdometryTeleOp extends LinearOpMode {
 
             }
 
+             */
+
+            /*
             if (gamepad1.rightBumperWasPressed())
             {
-                robotServo = true;
+                //robotServo = true;
                 //robot.UpServo.setPosition(0.428);
                 timer.resetTimer();
             }
+
 
             if (robotServo && timer.getElapsedTimeSeconds() > 0.5) {
                 robotServo = false;
@@ -116,6 +129,10 @@ public class OdometryTeleOp extends LinearOpMode {
 
             }
 
+             */
+            //above is an example of how to set something into a certain position for a certain amount
+            // of time before automatically readjusting
+            /*
             if(gamepad1.aWasPressed())
             {
 
@@ -131,7 +148,9 @@ public class OdometryTeleOp extends LinearOpMode {
                 }
 
             }
-            if (gamepad2.xWasPressed())
+
+             */
+            if (gamepad2.right_bumper)
             {
                 upOrDown += 1;
                 if (upOrDown % 2 == 0)
@@ -150,13 +169,14 @@ public class OdometryTeleOp extends LinearOpMode {
 
                 servoCount2 += 1;
                 if(servoCount2 % 2 == 0) {
-                    //robot.servoTwo.setPosition(0.4);
+                    robot.wheel.setPower(0.99);
 
 
                 }
                 else
                 {
                     //robot.servoTwo.setPosition(0.65);
+                    robot.wheel.setPower(0.00);
                 }
 
             }

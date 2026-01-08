@@ -15,6 +15,8 @@ public class Hardware {
     public DcMotor rb;
     public DcMotor lb;
 
+    public DcMotor wheel;
+
 
 
 
@@ -26,6 +28,8 @@ public class Hardware {
 
     public DcMotorEx shotMotorTwo;
 
+    public Servo gatekeepOne;
+    public Servo gatekeepTwo;
 
     //public Servo UpServo;
 
@@ -65,25 +69,30 @@ public class Hardware {
     public void init(HardwareMap hwMap) {
 
 
-        rf = hwMap.get(DcMotorEx.class, "cm1");
+        wheel = hwMap.get(DcMotorEx.class,"cm2");
+        wheel.setDirection(DcMotorSimple.Direction.REVERSE);
+        wheel.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        wheel.setPower(0.00);
+
+        rf = hwMap.get(DcMotorEx.class, "cm0");
         rf.setDirection(DcMotorSimple.Direction.REVERSE);
         rf.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rf.setPower(0);
         //1
 
-        rb = hwMap.get(DcMotorEx.class, "cm0");
+        rb = hwMap.get(DcMotorEx.class, "cm1");
         rb.setDirection(DcMotorSimple.Direction.REVERSE);
         rb.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rb.setPower(0);
         //3
 
 
-        lf = hwMap.get(DcMotorEx.class, "em1");
+        lf = hwMap.get(DcMotorEx.class, "em2");
         lf.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         lf.setPower(0);
         //0
 
-        lb = hwMap.get(DcMotorEx.class, "em2");
+        lb = hwMap.get(DcMotorEx.class, "em1");
         lb.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         lb.setPower(0);
 
@@ -101,22 +110,26 @@ public class Hardware {
 
          */
         intake = hwMap.get(DcMotorEx.class, "em0");
-        intake.setDirection(DcMotorSimple.Direction.REVERSE);
+        //intake.setDirection(DcMotorSimple.Direction.REVERSE);
         intake.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         intake.setPower(0);
+
+
 
 
 
         shotMotorOne = hwMap.get(DcMotorEx.class, "cm3");
 
         shotMotorOne.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        shotMotorOne.setDirection(DcMotorSimple.Direction.REVERSE);
+        //shotMotorOne.setDirection(DcMotorSimple.Direction.REVERSE);
         shotMotorOne.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         shotMotorOne.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         shotMotorOne.setPower(0);
 
 
+
         shotMotorTwo = hwMap.get(DcMotorEx.class, "em3");
+        shotMotorTwo.setDirection(DcMotorSimple.Direction.REVERSE);
         shotMotorTwo.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         shotMotorTwo.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         shotMotorTwo.setZeroPowerBehavior((DcMotor.ZeroPowerBehavior.BRAKE));
@@ -129,6 +142,9 @@ public class Hardware {
         //UpServo = hwMap.get(Servo.class, "s0");
 
         //servoTwo = hwMap.get(Servo.class, "s1");
+
+        gatekeepOne = hwMap.get(Servo.class, "s0");
+        gatekeepTwo = hwMap.get(Servo.class, "s1");
 
     }
 
