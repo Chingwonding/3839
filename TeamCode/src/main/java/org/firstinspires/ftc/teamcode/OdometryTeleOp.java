@@ -12,8 +12,6 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
 
-//let me try to beautify this whole thing so its more readable
-
 
 @TeleOp (name = "3839's tears")
 public class OdometryTeleOp extends LinearOpMode {
@@ -96,23 +94,7 @@ public class OdometryTeleOp extends LinearOpMode {
 
             }
 
-            /*
-            if (gamepad1.xWasPressed())
-            {
-                upOrDown += 1;
-                if (upOrDown % 2 == 0)
-                {
-                    robot.intake.setPower(0.99);
 
-                }
-                else
-                {
-                    robot.intake.setPower(0);
-                }
-
-            }
-
-             */
 
             /*
             if (gamepad1.rightBumperWasPressed())
@@ -132,24 +114,7 @@ public class OdometryTeleOp extends LinearOpMode {
              */
             //above is an example of how to set something into a certain position for a certain amount
             // of time before automatically readjusting
-            /*
-            if(gamepad1.aWasPressed())
-            {
 
-                servoCount2 += 1;
-                if(servoCount2 % 2 == 0) {
-                    //robot.servoTwo.setPosition(0.4);
-
-
-                }
-                else
-                {
-//                    robot.servoTwo.setPosition(0.65);
-                }
-
-            }
-
-             */
             if (gamepad2.right_bumper)
             {
                 upOrDown += 1;

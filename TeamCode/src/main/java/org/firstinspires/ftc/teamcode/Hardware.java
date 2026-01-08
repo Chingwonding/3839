@@ -136,15 +136,8 @@ public class Hardware {
         shotMotorTwo.setPower(0);
 
 
-        //0
 
-        //servos
-        //UpServo = hwMap.get(Servo.class, "s0");
 
-        //servoTwo = hwMap.get(Servo.class, "s1");
-
-        gatekeepOne = hwMap.get(Servo.class, "s0");
-        gatekeepTwo = hwMap.get(Servo.class, "s1");
 
     }
 

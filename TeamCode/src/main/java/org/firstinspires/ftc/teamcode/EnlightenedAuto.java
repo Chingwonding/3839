@@ -60,6 +60,9 @@ public class EnlightenedAuto extends OpMode {
     private static final double SERVO_DOWN_POSITION = 0.428;
     private static final double SERVO_UP_POSITION = 0.593;
 
+    private double delay;
+    //how do you set a timer
+
     //set paths and path chain
     private Path EnlightenedAuto;
     private PathChain one,two,three,four,five,six,seven,eight,nine,ten,eleven,twelve;
@@ -79,6 +82,8 @@ public class EnlightenedAuto extends OpMode {
 
     public void buildPaths() {
 
+
+        //check how to build paths again
         //build the individual paths here I guess
     }
 
@@ -147,58 +152,20 @@ public class EnlightenedAuto extends OpMode {
         switch (shootingState) {
             case 0: // State 0: Initialize and start motors
 
-                /*
-                robot.shotMotorOne.setPower(0.6);
-                robot.shotMotorTwo.setPower(0.6);
-                shotsCompleted = 0;
+                robot.intake.setPower(0.99);
+                robot.wheel.setPower(0.99);
 
 
-                 */
-
-                velocity = 0.625 * 6000 * 28 / 60;
-                robot.shotMotorOne.setVelocity(velocity);
-                robot.shotMotorTwo.setVelocity(velocity);
-                telemetry.addData("shot power: ", velocity);
-                telemetry.update();
-                shootingState = 1; // Move to the first action
-                pathTimer.resetTimer();
-                break;
 
             case 1: // State 1: Move servo UP
-                //robot.UpServo.setPosition(SERVO_UP_POSITION);
-                shootingState = 2; // Move to next state (wait)
-                pathTimer.resetTimer();
 
-                //robot.servoTwo.setPosition(0.4);
-                break;
 
             case 2: // State 2: Wait 0.5s, then move servo DOWN
-                if (pathTimer.getElapsedTimeSeconds() > 0.5) {
-                    //robot.UpServo.setPosition(SERVO_DOWN_POSITION);
-                    shotsCompleted++;
-                    //robot.servoTwo.setPosition(0.65);
-                    shootingState = 3; // Move to next state (wait)
-                    pathTimer.resetTimer();
-                }
-                break;
+
+
 
             case 3: // State 3: Wait 0.5s, then decide to loop or finish
-                if (pathTimer.getElapsedTimeSeconds() > 0.5) {
-                    if (shotsCompleted < 3) {
-                        //robot.UpServo.setPosition(SERVO_UP_POSITION);
-                        robot.shotMotorOne.setPower(0);
-                        robot.shotMotorTwo.setPower(0);
-                        shootingState = 1; // Loop back for the next shot
-                        pathTimer.resetTimer();
-                    } else {
-                        // Finished 3 shots, clean up
-                        robot.shotMotorOne.setPower(0);
-                        robot.shotMotorTwo.setPower(0);
-                        shootingState = 0; // Reset for next time
-                        return true; // Signal completion
-                    }
-                }
-                break;
+
         }
         return false; // Signal that the sequence is still running
     }
