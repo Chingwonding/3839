@@ -135,6 +135,14 @@ public class Hardware {
         shotMotorTwo.setZeroPowerBehavior((DcMotor.ZeroPowerBehavior.BRAKE));
         shotMotorTwo.setPower(0);
 
+        //control hub
+        gatekeepTwo = hwMap.get(Servo.class, "es00");
+
+        //expansionhub
+        gatekeepOne = hwMap.get(Servo.class, "es0");
+
+
+
 
 
 

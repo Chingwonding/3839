@@ -115,7 +115,8 @@ public class OdometryTeleOp extends LinearOpMode {
             //above is an example of how to set something into a certain position for a certain amount
             // of time before automatically readjusting
 
-            if (gamepad2.right_bumper)
+            if (gamepad2.right_bumper())
+            {)
             {
                 upOrDown += 1;
                 if (upOrDown % 2 == 0)
