@@ -34,6 +34,8 @@ public class AnotherAuto extends OpMode {
     private final Pose beforePickUp3 = new Pose(70, 25, Math.toRadians(180));
     private final Pose afterPickUp3 = new Pose(20, 25, Math.toRadians(180));
 
+    private final Pose yes = new Pose(120, -120, 90);
+
     // Declare Paths
     private Path initialPath;
     private PathChain scoreCycle1, grabCycle2, scoreCycle2, grabCycle3, scoreCycle3;
@@ -185,12 +187,18 @@ public class AnotherAuto extends OpMode {
     }
 
     public void readyToShoot() {
-        robot.shotMotorOne.setPower(0.7);
-        robot.shotMotorTwo.setPower(0.7);
-        //robot.UpServo.setPosition(0.428);
+        //intake, wheel, stop wheel, stop intake, open gateservo, shotmotor, wheel, close all motors
+        //need way to have delay
     }
 
     // It would be a good idea to add other action methods like these:
     // public void shoot() { ... }
     // public void pickup() { ... }
+
+    //just work brochaco why why whyYYYyyyYyYY
+
+
+    //astagfiruallah bruh
+
+
 }
