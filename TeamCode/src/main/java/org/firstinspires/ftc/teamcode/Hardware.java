@@ -101,6 +101,7 @@ public class Hardware {
 
          */
         intake = hwMap.get(DcMotorEx.class, "em0");
+        intake.setDirection(DcMotorSimple.Direction.REVERSE);
         intake.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         intake.setPower(0);
 
