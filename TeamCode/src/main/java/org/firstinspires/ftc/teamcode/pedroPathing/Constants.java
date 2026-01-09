@@ -25,6 +25,16 @@ public class Constants {
             .centripetalScaling(0.0005);
 
 
+    //did heading
+    //check pedropathing website for steps to do next to remove confusion
+
+    //tasks:
+    //write shooting method
+    //map out and calculate paths
+    //replot points
+    
+
+
 
     //change mass later and must be in kg
 
