@@ -8,6 +8,9 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 public class FirstAuto extends LinearOpMode {
 
 
+
+    //this will be the auto we use for the competition
+
     Hardware robot = Hardware.getInstance();
 
     public void runOpMode() {
@@ -88,5 +91,15 @@ public class FirstAuto extends LinearOpMode {
         robot.lf.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         robot.rb.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         robot.lb.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+    }
+
+
+    public void shot(double speed) {
+        //first intake and stuff
+        robot.intake.setPower(0.99);
+        //robot.wheel.setPower(0.99);
+        robot.shotMotorOne.setPower(speed);
+
+        //finish tmrw
     }
 }
