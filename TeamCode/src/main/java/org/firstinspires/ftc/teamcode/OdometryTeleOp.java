@@ -103,15 +103,15 @@ public class OdometryTeleOp extends LinearOpMode {
                 servoCount += 1;
                 if(servoCount % 2 == 0) {
                     robotServo = true;
-                    robot.gatekeepTwo.setPosition(0.807);
-                    robot.gatekeepOne.setPosition(0.463);
+                    robot.gatekeepTwo.setPosition(0.400);
+                    robot.gatekeepOne.setPosition(1.200);
                     timer.resetTimer();
 
                 }
                 else {
                     robotServo = false;
-                    robot.gatekeepOne.setPosition(0.711);
-                    robot.gatekeepTwo.setPosition(0.359);
+                    robot.gatekeepOne.setPosition(0.900);
+                    robot.gatekeepTwo.setPosition(0.807);
 
                 }
 
