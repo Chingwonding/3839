@@ -48,7 +48,7 @@ public class ServoTester extends LinearOpMode {
                 pressingB = false;
             }
 
-            //robot.servoTwo.setPosition(position);
+            robot.gatekeepTwo.setPosition(position);
             telemetry.addData("Position", position);
             telemetry.update();
 

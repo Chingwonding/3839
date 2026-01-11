@@ -28,7 +28,6 @@ public class Hardware {
 
     public DcMotorEx shotMotorTwo;
 
-    public Servo gatekeepOne;
     public Servo gatekeepTwo;
 
     //public Servo UpServo;
@@ -139,7 +138,9 @@ public class Hardware {
         gatekeepTwo = hwMap.get(Servo.class, "es00");
 
         //expansionhub
-        gatekeepOne = hwMap.get(Servo.class, "es0");
+        //gatekeepOne = hwMap.get(Servo.class, "es0");
+
+
 
 
 

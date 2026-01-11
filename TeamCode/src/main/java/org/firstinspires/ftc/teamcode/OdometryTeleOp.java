@@ -73,8 +73,7 @@ public class OdometryTeleOp extends LinearOpMode {
                 if (shotOrNah % 2 == 0) {
 
 
-                    velocity = 0.450
-                            * 6000 * 28 / 60;
+                    velocity = 0.65;
                     robot.shotMotorOne.setPower(velocity);
                     robot.shotMotorTwo.setPower(velocity);
 
@@ -103,15 +102,15 @@ public class OdometryTeleOp extends LinearOpMode {
                 servoCount += 1;
                 if(servoCount % 2 == 0) {
                     robotServo = true;
-                    robot.gatekeepTwo.setPosition(0.400);
-                    robot.gatekeepOne.setPosition(1.200);
+                    robot.gatekeepTwo.setPosition(0.45);
+                    //robot.gatekeepOne.setPosition(1.4);
                     timer.resetTimer();
 
                 }
                 else {
                     robotServo = false;
-                    robot.gatekeepOne.setPosition(0.900);
-                    robot.gatekeepTwo.setPosition(0.807);
+                    //robot.gatekeepOne.setPosition(0.3);
+                    robot.gatekeepTwo.setPosition(0.75);
 
                 }
 
