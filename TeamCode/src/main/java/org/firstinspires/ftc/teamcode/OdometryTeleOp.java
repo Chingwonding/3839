@@ -67,6 +67,7 @@ public class OdometryTeleOp extends LinearOpMode {
 
 
 
+            //shooting
             if(gamepad1.right_trigger > 0.01)
             {
                 shotOrNah += 1;
@@ -89,14 +90,7 @@ public class OdometryTeleOp extends LinearOpMode {
                     robot.shotMotorTwo.setPower(0);
                 }
 
-
-
-
             }
-
-
-
-        //both servos 
             if (gamepad1.leftBumperWasPressed())
             {
                 servoCount += 1;

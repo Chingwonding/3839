@@ -30,29 +30,6 @@ public class Hardware {
 
     public Servo gatekeepTwo;
 
-    //public Servo UpServo;
-
-    //public Servo servoTwo;
-    //intake motors and servo
-
-
-    //motor for shooting
-
-    /*
-    public DcMotor shotMotor;
-    
-    
-
-    //servos
-    public Servo shotServo;
-
-    public Servo Servotwo;
-
-    public Servo Servothree;
-
-     */
-
-
     public static double maxSpeed = 0.9;
 
     private static Hardware myInstance = null;
@@ -95,26 +72,11 @@ public class Hardware {
         lb.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         lb.setPower(0);
 
-        //motor for shooting
-        //I set it two em3 can change it later
 
-        /*
-        shotMotor = hwMap.get(DcMotorEx.class, "em3");
-        shotMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        shotMotor.setPower(0);
-
-        shotServo = hwMap.get(Servo.class, "es1");
-
-        Servotwo = hwMap.get(Servo.class, "es2");
-
-         */
         intake = hwMap.get(DcMotorEx.class, "em0");
         //intake.setDirection(DcMotorSimple.Direction.REVERSE);
         intake.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         intake.setPower(0);
-
-
-
 
 
         shotMotorOne = hwMap.get(DcMotorEx.class, "cm3");
@@ -124,8 +86,6 @@ public class Hardware {
         shotMotorOne.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         shotMotorOne.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         shotMotorOne.setPower(0);
-
-
 
         shotMotorTwo = hwMap.get(DcMotorEx.class, "em3");
         shotMotorTwo.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -137,8 +97,6 @@ public class Hardware {
         //control hub
         gatekeepTwo = hwMap.get(Servo.class, "es00");
 
-        //expansionhub
-        //gatekeepOne = hwMap.get(Servo.class, "es0");
 
 
 
