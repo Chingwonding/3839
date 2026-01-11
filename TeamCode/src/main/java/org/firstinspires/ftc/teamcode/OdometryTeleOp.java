@@ -96,7 +96,7 @@ public class OdometryTeleOp extends LinearOpMode {
 
 
 
-        //first servo
+        //both servos 
             if (gamepad1.leftBumperWasPressed())
             {
                 servoCount += 1;
