@@ -831,16 +831,21 @@ class HeadingTuner extends OpMode {
         telemetryM.update(telemetry);
         follower.update();
         drawOnlyCurrent();
+        //telemetry.addData("Heading", heading)
+        //double heading = follower.getPose().getHeading();
+        //telemetry.addData("heading: ", heading);
     }
 
     @Override
     public void start() {
         follower.deactivateAllPIDFs();
         follower.activateHeading();
+
         forwards = new Path(new BezierLine(new Pose(72,72), new Pose(DISTANCE + 72,72)));
         forwards.setConstantHeadingInterpolation(0);
         backwards = new Path(new BezierLine(new Pose(DISTANCE + 72,72), new Pose(72,72)));
         backwards.setConstantHeadingInterpolation(0);
+        //follower.(follower.getPose().getHeading())
         follower.followPath(forwards);
     }
 
