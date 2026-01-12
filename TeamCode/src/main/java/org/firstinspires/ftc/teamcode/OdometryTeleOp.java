@@ -78,6 +78,11 @@ public class OdometryTeleOp extends LinearOpMode {
                     robot.shotMotorOne.setPower(velocity);
                     robot.shotMotorTwo.setPower(velocity);
 
+
+                    //write Auto
+                    telemetry.addData("Velocity", velocity);
+                    //shows on the driver station
+
                     telemetry.addData("Velocity", velocity);
                     telemetry.update();
 

@@ -103,4 +103,16 @@ public class FirstAuto extends LinearOpMode {
         robot.rb.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         robot.lb.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
+
+    public void shoot(double speed)
+    {
+        robot.shotMotorOne.setPower(speed);
+        robot.shotMotorTwo.setPower(speed);
+
+        robot.gatekeepTwo.setPosition(0.0);
+        //set the power later..preferably this afternoon
+
+
+    }
+
 }
