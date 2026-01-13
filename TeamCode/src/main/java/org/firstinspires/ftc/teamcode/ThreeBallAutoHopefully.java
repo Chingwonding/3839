@@ -25,7 +25,9 @@ public class ThreeBallAutoHopefully extends OpMode {
 
     private final Pose initialpose = new Pose(155.91, 130.31, Math.toRadians(45));
     private final Pose finalpose = new Pose(120.64, 107.027, Math.toRadians(100));
-    //private final Pose middlepose = new Pose(155.91, )
+    private final Pose middlepose = new Pose(155.91, 130.31, Math.toRadians(45) );
+
+    private final Pose middlepose2 = new Pose(120.64, 107.027, Math.toRadians(100) );
 
     private Path threeballpath;
 
@@ -43,12 +45,15 @@ public class ThreeBallAutoHopefully extends OpMode {
         follower.setStartingPose(initialpose);
     }
 
+    
     public void buildPaths() {
         threeballpath = new Path(new BezierLine(initialpose, finalpose));
         threeballpath.setLinearHeadingInterpolation(initialpose.getHeading(), finalpose.getHeading());
 
 
-        //threeballpath = new Path(new BezierLine())
+        threeballpath = new Path(new BezierLine(finalpose, middlepose));
+        threeballpath.setLinearHeadingInterpolation(finalpose.getHeading(), middlepose.getHeading());
+
     }
 
     @Override
