@@ -29,7 +29,7 @@ public class ThreeBallAutoHopefully extends OpMode {
 
     private final Pose middlepose2 = new Pose(120.64, 107.027, Math.toRadians(100) );
 
-    private Path threeballpath;
+    private Path firstPath, secondPath, threeballpath;
 
     private static final double SERVO_DOWN_POSITION = 0.428;
     private static final double SERVO_UP_POSITION = 0.593;
@@ -41,18 +41,23 @@ public class ThreeBallAutoHopefully extends OpMode {
         opmodeTimer = new Timer();
 
         follower = Constants.createFollower(hardwareMap);
-        buildPaths(); 
+        buildPaths();
         follower.setStartingPose(initialpose);
     }
 
     
     public void buildPaths() {
-        threeballpath = new Path(new BezierLine(initialpose, finalpose));
-        threeballpath.setLinearHeadingInterpolation(initialpose.getHeading(), finalpose.getHeading());
+        //create naming system for ts
+        firstPath = new Path(new BezierLine(initialpose, finalpose));
+        firstPath.setLinearHeadingInterpolation(initialpose.getHeading(), finalpose.getHeading());
+
+        secondPath = new Path(new BezierLine(finalpose, middlepose));
+        secondPath.setLinearHeadingInterpolation(finalpose.getHeading(), middlepose.getHeading());
 
 
-        threeballpath = new Path(new BezierLine(finalpose, middlepose));
-        threeballpath.setLinearHeadingInterpolation(finalpose.getHeading(), middlepose.getHeading());
+
+
+
 
     }
 
@@ -82,14 +87,15 @@ public class ThreeBallAutoHopefully extends OpMode {
         switch (pathState) {
             case 0:
 
-                //robot.servoTwo.setPosition(0.4);
-                // Start following the path
-                follower.followPath(threeballpath);
+                follower.followPath(firstPath);
                 setPathState(1);
                 break;
             case 1:
                 // Wait for the path to finish
                 if (!follower.isBusy()) {
+                    follower.followPath(secondPath);
+                    telemetry.addData("Path finished at: ", getCoordinatesString());
+                    telemetry.update();
                     // Path is complete, start the shooting sequence.
                     setPathState(2);
                 }
@@ -97,6 +103,7 @@ public class ThreeBallAutoHopefully extends OpMode {
             case 2:
                 // Run the shooting sequence. It will signal when it's done.
                 if (runShootingSequence()) {
+
                     // Sequence is done, move to final state
                     setPathState(3);
                 }
@@ -116,6 +123,16 @@ public class ThreeBallAutoHopefully extends OpMode {
      */
 
     double velocity;
+    public void intake()
+    {
+        robot.intake.setPower(0.0);
+        robot.wheel.setPower(0.0);
+        robot.intake.setPower(0.5);
+        robot.wheel.setPower(0.5);
+
+
+    }
+
     public boolean runShootingSequence() {
         switch (shootingState) {
             case 0: // State 0: Initialize and start motors
@@ -152,6 +169,8 @@ public class ThreeBallAutoHopefully extends OpMode {
                     //robot.servoTwo.setPosition(0.65);
                     shootingState = 3; // Move to next state (wait)
                     pathTimer.resetTimer();
+
+
                 }
                 break;
 

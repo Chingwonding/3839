@@ -988,10 +988,20 @@ class Line extends OpMode {
     @Override
     public void start() {
         follower.activateAllPIDFs();
+
+
+        Pose startPose = new Pose(72, 72, 0);
+        follower.setPose(startPose);
+
+        double h = follower.getPose().getHeading();
         forwards = new Path(new BezierLine(new Pose(72,72), new Pose(DISTANCE + 72,72)));
-        forwards.setConstantHeadingInterpolation(0);
         backwards = new Path(new BezierLine(new Pose(DISTANCE + 72,72), new Pose(72,72)));
-        backwards.setConstantHeadingInterpolation(0);
+
+
+        forwards.setConstantHeadingInterpolation(h);
+        backwards.setConstantHeadingInterpolation(h);
+
+
         follower.followPath(forwards);
     }
 
@@ -1010,6 +1020,9 @@ class Line extends OpMode {
                 follower.followPath(forwards);
             }
         }
+
+        telemetry.addData("busy", follower.isBusy());
+        telemetry.addData("pose", follower.getPose());
 
         telemetryM.debug("Driving Forward?: " + forward);
         telemetryM.update(telemetry);

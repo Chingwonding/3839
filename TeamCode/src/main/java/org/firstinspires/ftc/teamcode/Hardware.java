@@ -54,23 +54,29 @@ public class Hardware {
         rf.setDirection(DcMotorSimple.Direction.REVERSE);
         rf.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rf.setPower(0);
+
+        //this should be cm1
         //1
 
         rb = hwMap.get(DcMotorEx.class, "cm1");
         rb.setDirection(DcMotorSimple.Direction.REVERSE);
         rb.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rb.setPower(0);
+
+        //this should be cm0
         //3
 
 
         lf = hwMap.get(DcMotorEx.class, "em2");
         lf.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         lf.setPower(0);
+        //this should be em1
         //0
 
         lb = hwMap.get(DcMotorEx.class, "em1");
         lb.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         lb.setPower(0);
+        //this should be em2
 
 
         intake = hwMap.get(DcMotorEx.class, "em0");
