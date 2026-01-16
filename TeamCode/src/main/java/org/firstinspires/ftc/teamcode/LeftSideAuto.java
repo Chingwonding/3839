@@ -11,7 +11,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
 @Autonomous(name = "ThreeBallAuto", group = "Examples")
-public class ThreeBallAutoHopefully extends OpMode { 
+public class LeftSideAuto extends OpMode {
 
     Hardware robot = Hardware.getInstance();
     private Follower follower;
@@ -19,40 +19,40 @@ public class ThreeBallAutoHopefully extends OpMode {
 
     private int pathState;
 
-    // State variables for the reusable shooting sequence
     private int shootingState = 0;
     private int shotsCompleted = 0;
 
-    private final Pose initialpose = new Pose(155.91, 130.31, Math.toRadians(45));
-    private final Pose finalpose = new Pose(120.64, 107.027, Math.toRadians(100));
-    private final Pose middlepose = new Pose(155.91, 130.31, Math.toRadians(45) );
 
-    private final Pose middlepose2 = new Pose(120.64, 107.027, Math.toRadians(100) );
+    private final Pose one = new Pose(0, 0, Math.toRadians(0));
 
-    private Path firstPath, secondPath, threeballpath, sixballpath;
+    private final Pose two = new Pose(0, 0, Math.toRadians(0));
 
-    private static final double SERVO_DOWN_POSITION = 0.428;
-    private static final double SERVO_UP_POSITION = 0.593;
+    private final Pose three = new Pose(0, 0, Math.toRadians(0));
+
+    private final Pose four = new Pose(0, 0, Math.toRadians(0));
+
+    //five will be for shooting
+    private final Pose five = new Pose(0, 0, Math.toRadians(0));
+    private Path yes;
+
 
     @Override
     public void init() {
-        robot.init(hardwareMap); 
+        robot.init(hardwareMap);
         pathTimer = new Timer();
         opmodeTimer = new Timer();
 
         follower = Constants.createFollower(hardwareMap);
         buildPaths();
-        follower.setStartingPose(initialpose);
+
+        //placeholder
+        follower.setStartingPose(new Pose(0, 0, 0));
     }
 
-    
+
     public void buildPaths() {
         //create naming system for ts
-        firstPath = new Path(new BezierLine(initialpose, finalpose));
-        firstPath.setLinearHeadingInterpolation(initialpose.getHeading(), finalpose.getHeading());
 
-        secondPath = new Path(new BezierLine(finalpose, middlepose));
-        secondPath.setLinearHeadingInterpolation(finalpose.getHeading(), middlepose.getHeading());
 
 
 
@@ -87,13 +87,15 @@ public class ThreeBallAutoHopefully extends OpMode {
         switch (pathState) {
             case 0:
 
-                follower.followPath(firstPath);
+                follower.followPath(yes);
+                telemetry.addData("Path finished at: ", getCoordinatesString());
+                telemetry.update();
                 setPathState(1);
                 break;
             case 1:
                 // Wait for the path to finish
                 if (!follower.isBusy()) {
-                    follower.followPath(secondPath);
+                    follower.followPath(yes);
                     telemetry.addData("Path finished at: ", getCoordinatesString());
                     telemetry.update();
                     // Path is complete, start the shooting sequence.
@@ -126,82 +128,62 @@ public class ThreeBallAutoHopefully extends OpMode {
     double velocity;
     public void intake()
     {
-        robot.intake.setPower(0.0);
-        robot.wheel.setPower(0.0);
-        robot.intake.setPower(0.5);
-        robot.wheel.setPower(0.5);
+
 
 
     }
 
     public boolean runShootingSequence() {
         switch (shootingState) {
-            case 0: // State 0: Initialize and start motors
+            case 0:
 
-                /*
-                robot.shotMotorOne.setPower(0.6);
-                robot.shotMotorTwo.setPower(0.6);
-                shotsCompleted = 0;
-
-
-                 */
-
-                velocity = 0.625 * 6000 * 28 / 60;
-                robot.shotMotorOne.setVelocity(velocity);
-                robot.shotMotorTwo.setVelocity(velocity);
                 telemetry.addData("shot power: ", velocity);
                 telemetry.update();
                 shootingState = 1; // Move to the first action
                 pathTimer.resetTimer();
                 break;
 
-            case 1: // State 1: Move servo UP
-                //robot.UpServo.setPosition(SERVO_UP_POSITION);
-                shootingState = 2; // Move to next state (wait)
+            case 1:
+                shootingState = 2;
                 pathTimer.resetTimer();
 
-                //robot.servoTwo.setPosition(0.4);
+
                 break;
 
-            case 2: // State 2: Wait 0.5s, then move servo DOWN
+            case 2:
                 if (pathTimer.getElapsedTimeSeconds() > 0.5) {
-                    //robot.UpServo.setPosition(SERVO_DOWN_POSITION);
                     shotsCompleted++;
-                    //robot.servoTwo.setPosition(0.65);
-                    shootingState = 3; // Move to next state (wait)
+                    shootingState = 3;
                     pathTimer.resetTimer();
 
 
                 }
                 break;
 
-            case 3: // State 3: Wait 0.5s, then decide to loop or finish
+            case 3:
                 if (pathTimer.getElapsedTimeSeconds() > 0.5) {
                     if (shotsCompleted < 3) {
-                        //robot.UpServo.setPosition(SERVO_UP_POSITION);
                         robot.shotMotorOne.setPower(0);
                         robot.shotMotorTwo.setPower(0);
-                        shootingState = 1; // Loop back for the next shot
+                        shootingState = 1;
                         pathTimer.resetTimer();
                     } else {
-                        // Finished 3 shots, clean up
                         robot.shotMotorOne.setPower(0);
                         robot.shotMotorTwo.setPower(0);
-                        shootingState = 0; // Reset for next time
-                        return true; // Signal completion
+                        shootingState = 0;
+                        return true;
                     }
                 }
                 break;
         }
-        return false; // Signal that the sequence is still running
+        return false;
     }
 
-    // Helper method to change the main path state
     public void setPathState(int state) {
         pathState = state;
         pathTimer.resetTimer();
     }
-    
+
     public String getCoordinatesString() {
         Pose currentPose = follower.getPose();
         return "X: " + currentPose.getX() + ", Y: " + currentPose.getY() + ", Heading: " + Math.toDegrees(currentPose.getHeading());
