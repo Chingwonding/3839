@@ -111,6 +111,7 @@ public class OdometryTeleOp extends LinearOpMode {
                     //robot.gatekeepOne.setPosition(0.3);
                     robot.gatekeepTwo.setPosition(0.75);
 
+
                 }
 
             }
