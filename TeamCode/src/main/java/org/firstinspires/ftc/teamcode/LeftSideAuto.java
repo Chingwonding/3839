@@ -28,10 +28,10 @@ public class LeftSideAuto extends OpMode {
 
 
 
-    private final Pose one = new Pose(23.6124,125.5751, Math.toRadians(140));
+    private final Pose one = new Pose(122.64,123.25, Math.toRadians(230));
 
-    private final Pose two = new Pose(40.2484, 84.2534,Math.toRadians(180) );
-    private final Pose twoshot = new Pose(20.24, -21.77,1.50727);
+    private final Pose two = new Pose(110.13, 75.67, -2.87 );
+    private final Pose twoshot = new Pose(134.82, 80.09,-2.95);
 
     private final Pose three = new Pose(84.1058, 116.9029,1.4998);
     private final Pose threeshot = new Pose(84.087, 141.999, -1.5616);
@@ -41,7 +41,7 @@ public class LeftSideAuto extends OpMode {
 
 
     //five will be for shooting
-    private final Pose five = new Pose(40.6062, 106.6137,140 );
+    private final Pose five = new Pose(96.401, 93.52, -2.31);
 
 
 
@@ -55,7 +55,7 @@ public class LeftSideAuto extends OpMode {
         buildPaths();
 
         //placeholder
-        follower.setStartingPose(new Pose(23.6124,125.5751, Math.toRadians(140)));
+        follower.setStartingPose(new Pose(122.6370,123.245, Math.toRadians(230)));
     }
 
 
@@ -120,49 +120,6 @@ public class LeftSideAuto extends OpMode {
         telemetry.addData("Robot Position", getCoordinatesString());
         telemetry.update();
     }
-
-
-
-    // The main, cleaner state machine for our autonomous routine
-
-    /*
-    public void autonomousPathUpdate() {
-        switch (pathState) {
-            case 0:
-                follower.followPath(pathone);
-                telemetry.addData("Path finished at: ", getCoordinatesString());
-                telemetry.update();
-                setPathState(1);
-                break;
-            case 1:
-                // Wait for the path to finish
-                if (!follower.isBusy()) {
-                    oneCycle(pathtwoOne, pathtwoTwo, pathtwoThree);
-                    telemetry.addData("Path finished at: ", getCoordinatesString());
-                    telemetry.update();
-                    setPathState(2);
-                }
-                break;
-            case 2:
-                if (!follower.isBusy()) {
-                    oneCycle(pathThreeOne, pathThreeTwo, pathThreeThree);
-                    telemetry.addData("Path finished at: ", getCoordinatesString());
-                    telemetry.update();
-                    setPathState(3);
-                }
-
-
-                break;
-            case 3:
-                // Autonomous routine is finished. Do nothing.
-                telemetry.addData("Movement finished at: ", getCoordinatesString());
-                telemetry.update();
-                break;
-        }
-    }
-
-     */
-
     public void autonomousPathUpdate() {
         switch (pathState) {
             case 0: // Drive to initial shooting position

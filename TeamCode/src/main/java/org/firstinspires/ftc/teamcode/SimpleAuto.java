@@ -28,10 +28,10 @@ public class SimpleAuto extends OpMode {
 
 
 
-    private final Pose one = new Pose(0,0, Math.toRadians(0));
+    private final Pose one = new Pose(122.64,123.25, Math.toRadians(230));
 
-    private final Pose two = new Pose(40.2484, 84.2534,Math.toRadians(180) );
-    private final Pose twoshot = new Pose(20.24, -21.77,1.50727);
+    private final Pose two = new Pose(110.13, 75.67, -2.87 );
+    private final Pose twoshot = new Pose(134.82, 80.09,-2.95);
 
     private final Pose three = new Pose(84.1058, 116.9029,1.4998);
     private final Pose threeshot = new Pose(84.087, 141.999, -1.5616);
@@ -41,7 +41,7 @@ public class SimpleAuto extends OpMode {
 
 
     //five will be for shooting
-    private final Pose five = new Pose(20, 0,0 );
+    private final Pose five = new Pose(96.401, 93.52, -2.31);
 
 
 
@@ -55,8 +55,10 @@ public class SimpleAuto extends OpMode {
         buildPaths();
 
         //placeholder
-        follower.setStartingPose(new Pose(0,0, Math.toRadians(0)));
+        follower.setStartingPose(new Pose(122.6370, 123.245, Math.toRadians(230)));
     }
+
+
 
 
     public void buildPaths() {
@@ -65,7 +67,33 @@ public class SimpleAuto extends OpMode {
         pathone = new Path(new BezierLine(one, five));
         pathone.setLinearHeadingInterpolation(one.getHeading(), five.getHeading());
 
+
         //shot position to first ballpickup spot
+        pathtwoOne = new Path(new BezierLine(five, two));
+        pathtwoOne.setLinearHeadingInterpolation(five.getHeading(), two.getHeading());
+
+        //first ballpickupspot to end
+        pathtwoTwo = new Path(new BezierLine(two, twoshot));
+        pathtwoTwo.setLinearHeadingInterpolation(two.getHeading(), twoshot.getHeading());
+
+        //first end to shot
+        pathtwoThree = new Path(new BezierLine(twoshot, five));
+        pathtwoThree.setLinearHeadingInterpolation(twoshot.getHeading(), five.getHeading());
+
+
+        //shot position to second ballpickup spot
+        pathThreeOne = new Path(new BezierLine(five, three));
+        pathThreeOne.setLinearHeadingInterpolation(five.getHeading(), three.getHeading());
+
+        //second ballpickupspot to end
+        pathThreeTwo = new Path(new BezierLine(three, threeshot));
+        pathThreeTwo.setLinearHeadingInterpolation(three.getHeading(), threeshot.getHeading());
+
+        //second end to shot
+        pathThreeThree = new Path(new BezierLine(threeshot, five));
+        pathThreeThree.setLinearHeadingInterpolation(threeshot.getHeading(), five.getHeading());
+
+
 
 
 
@@ -103,6 +131,9 @@ public class SimpleAuto extends OpMode {
 
 
 
+
+
+
     public void autonomousPathUpdate() {
         switch (pathState) {
             case 0: // Drive to initial shooting position
@@ -110,6 +141,39 @@ public class SimpleAuto extends OpMode {
                 setPathState(1);
                 break;
             case 1:
+                if (!follower.isBusy())
+                {
+                    follower.followPath(pathtwoOne);
+                    setPathState(2);
+                }
+                break;
+            case 2:
+                intake();
+                if (pathTimer.getElapsedTimeSeconds() > 1.5) {
+
+                    follower.followPath(pathtwoTwo);
+                    setPathState(3); // Now move to case 3
+                }
+                break;
+
+            case 3:
+                if (!follower.isBusy())
+                {
+                    follower.followPath(pathtwoThree);
+                    setPathState(4);
+                }
+                break;
+            case 4:
+
+                //wait for the previous thing to be done first somehow
+                outtake();
+                if (!follower.isBusy())
+                {
+
+                    setPathState(6);
+                }
+                break;
+            case 5:
                 // Wait for the path to finish
                 if (!follower.isBusy()) {
                     telemetry.addData("Final coordinates: ", getCoordinatesString());
@@ -119,10 +183,10 @@ public class SimpleAuto extends OpMode {
                 }
                 break;
 
-
-
         }
     }
+
+
 
 
     public void intake()
@@ -141,6 +205,9 @@ public class SimpleAuto extends OpMode {
             robot.intake.setPower(0.0);
             robot.wheel.setPower(0.0);
         }
+
+
+        robot.gatekeepTwo.setPosition(0.147);
 
 
 
@@ -162,15 +229,18 @@ public class SimpleAuto extends OpMode {
         robot.shotMotorOne.setPower(0.99);
 
         // You mentioned intake/wheels need to be ON for outtake to work
-        robot.intake.setPower(0.99);
-        robot.wheel.setPower(0.99);
+        robot.intake.setPower(0.0);
+        robot.wheel.setPower(0.0);
 
+        robot.gatekeepTwo.setPosition(0.439);
         // Introducing the gap: Wait 0.5s for motors to rev before opening gate
-        if (pathTimer.getElapsedTimeSeconds() > 0.5) {
-            robot.gatekeepTwo.setPosition(0.45); // Open
-        } else {
-            robot.gatekeepTwo.setPosition(0.75); // Closed
+        if (pathTimer.getElapsedTimeSeconds() > 1) {
+             // Open
+
+            robot.intake.setPower(0.99);
+            robot.wheel.setPower(0.99);
         }
+
     }
 
     public void setCycleState(int state)

@@ -11,6 +11,14 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
+import com.pedropathing.follower.Follower;
+import com.pedropathing.geometry.BezierLine;
+import com.pedropathing.geometry.Pose;
+import com.pedropathing.paths.Path;
+import com.pedropathing.util.Timer;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+
 
 
 @TeleOp (name = "3839's tears")
@@ -23,6 +31,8 @@ public class OdometryTeleOp extends LinearOpMode {
     Timer timer = new Timer();
     Hardware robot = Hardware.getInstance();
     boolean robotServo;
+
+    Timer pathTimer = new Timer();
 
     //main run method
     public void runOpMode() {
@@ -142,8 +152,11 @@ public class OdometryTeleOp extends LinearOpMode {
                 }
 
             }
+
+
             if(gamepad2.aWasPressed())
             {
+
 
                 servoCount2 += 1;
                 if(servoCount2 % 2 == 0) {
@@ -157,7 +170,18 @@ public class OdometryTeleOp extends LinearOpMode {
                     robot.wheel.setPower(0.00);
                 }
 
+
+                outtake();
+
             }
+
+
+            if (gamepad2.xWasPressed())
+            {
+                outtake();
+            }
+
+
 
 
 
@@ -193,6 +217,23 @@ public class OdometryTeleOp extends LinearOpMode {
 
     }
 
+
+    public void outtake() {
+        // Start shooting motors immediately
+        robot.shotMotorTwo.setPower(0.99);
+        robot.shotMotorOne.setPower(0.99);
+
+        // You mentioned intake/wheels need to be ON for outtake to work
+        robot.intake.setPower(0.99);
+        robot.wheel.setPower(0.99);
+
+        // Introducing the gap: Wait 0.5s for motors to rev before opening gate
+        if (pathTimer.getElapsedTimeSeconds() > 3) {
+            robot.gatekeepTwo.setPosition(0.75); // Open
+        } else {
+            robot.gatekeepTwo.setPosition(0.45); // Closed
+        }
+    }
 
 }
 
