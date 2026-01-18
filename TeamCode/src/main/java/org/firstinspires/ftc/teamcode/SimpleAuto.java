@@ -225,17 +225,16 @@ public class SimpleAuto extends OpMode {
 
     public void outtake() {
         // Start shooting motors immediately
-        robot.shotMotorTwo.setPower(0.99);
-        robot.shotMotorOne.setPower(0.99);
+        robot.shotMotorTwo.setPower(0.70);
+        robot.shotMotorOne.setPower(0.70);
 
         // You mentioned intake/wheels need to be ON for outtake to work
         robot.intake.setPower(0.0);
         robot.wheel.setPower(0.0);
-
+        
         robot.gatekeepTwo.setPosition(0.439);
         // Introducing the gap: Wait 0.5s for motors to rev before opening gate
         if (pathTimer.getElapsedTimeSeconds() > 1) {
-             // Open
 
             robot.intake.setPower(0.99);
             robot.wheel.setPower(0.99);
