@@ -4,20 +4,21 @@ import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.Path;
+import com.pedropathing.paths.PathChain;
 import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
-@Autonomous(name = "killmyself", group = "Examples")
+@Autonomous(name = "SUH FWAE FWAE Rightside", group = "Examples")
 public class SimpleAuto extends OpMode {
 
+    
+    //initialize stuff fr
     Hardware robot = Hardware.getInstance();
     private Follower follower;
     private Timer pathTimer, opmodeTimer;
-
-    private Path pathone, pathtwoOne, pathtwoTwo, pathtwoThree, pathThreeOne, pathThreeTwo, pathThreeThree;
 
     private int shootingState = 0;
     private int shotsCompleted = 0;
@@ -26,14 +27,20 @@ public class SimpleAuto extends OpMode {
 
     private int cycleState;
 
+    
+    
+    
+    //paths and poses
 
 
-    private final Pose one = new Pose(122.64,123.25, Math.toRadians(230));
+    //tweak actual poses later
+    private PathChain pathone, pathtwoOne, pathtwoTwo, pathtwoThree, pathThreeOne, pathThreeTwo, pathThreeThree;
+    private final Pose one = new Pose(122.64, 123.25, Math.toRadians(230));
 
-    private final Pose two = new Pose(110.13, 75.67, -2.87 );
-    private final Pose twoshot = new Pose(134.82, 80.09,-2.95);
+    private final Pose two = new Pose(110.13, 75.67, -2.87);
+    private final Pose twoshot = new Pose(134.82, 80.09, -2.95);
 
-    private final Pose three = new Pose(84.1058, 116.9029,1.4998);
+    private final Pose three = new Pose(84.1058, 116.9029, 1.4998);
     private final Pose threeshot = new Pose(84.087, 141.999, -1.5616);
 
     private final Pose four = new Pose(56.0182, 109.649, -1.5050);
@@ -44,7 +51,8 @@ public class SimpleAuto extends OpMode {
     private final Pose five = new Pose(96.401, 93.52, -2.31);
 
 
-
+    
+    //start
     @Override
     public void init() {
         robot.init(hardwareMap);
@@ -59,53 +67,136 @@ public class SimpleAuto extends OpMode {
     }
 
 
-
-
     public void buildPaths() {
 
-        //starting position to shot position
-        pathone = new Path(new BezierLine(one, five));
-        pathone.setLinearHeadingInterpolation(one.getHeading(), five.getHeading());
-
+        //
+        pathone = follower.pathBuilder()
+                .addPath(new BezierLine(one, five))
+                .setLinearHeadingInterpolation(one.getHeading(), five.getHeading()).build();
 
         //shot position to first ballpickup spot
-        pathtwoOne = new Path(new BezierLine(five, two));
-        pathtwoOne.setLinearHeadingInterpolation(five.getHeading(), two.getHeading());
+        pathtwoOne = follower.pathBuilder()
+                .addPath(new BezierLine(five, two))
+                .setLinearHeadingInterpolation(five.getHeading(), two.getHeading()).build();
 
         //first ballpickupspot to end
-        pathtwoTwo = new Path(new BezierLine(two, twoshot));
-        pathtwoTwo.setLinearHeadingInterpolation(two.getHeading(), twoshot.getHeading());
+        pathtwoTwo = follower.pathBuilder()
+                .addPath(new BezierLine(two, twoshot))
+                .setLinearHeadingInterpolation(two.getHeading(), twoshot.getHeading()).build();
+       
 
-        //first end to shot
-        pathtwoThree = new Path(new BezierLine(twoshot, five));
-        pathtwoThree.setLinearHeadingInterpolation(twoshot.getHeading(), five.getHeading());
-
-
-        //shot position to second ballpickup spot
-        pathThreeOne = new Path(new BezierLine(five, three));
-        pathThreeOne.setLinearHeadingInterpolation(five.getHeading(), three.getHeading());
+        pathtwoThree = follower.pathBuilder()
+                .addPath(new BezierLine(twoshot, five))
+                .setLinearHeadingInterpolation(twoshot.getHeading(), five.getHeading()).build();
+        
+        //shot position to second ballpickup spot   
+        pathThreeOne = follower.pathBuilder()
+                .addPath(new BezierLine(five, three))
+                .setLinearHeadingInterpolation(five.getHeading(), three.getHeading()).build();
 
         //second ballpickupspot to end
-        pathThreeTwo = new Path(new BezierLine(three, threeshot));
-        pathThreeTwo.setLinearHeadingInterpolation(three.getHeading(), threeshot.getHeading());
+        pathThreeTwo = follower.pathBuilder()
+                .addPath(new BezierLine(three, threeshot))
+                .setLinearHeadingInterpolation(three.getHeading(), threeshot.getHeading()).build();
 
         //second end to shot
-        pathThreeThree = new Path(new BezierLine(threeshot, five));
-        pathThreeThree.setLinearHeadingInterpolation(threeshot.getHeading(), five.getHeading());
-
-
-
-
-
+        pathThreeThree = follower.pathBuilder()
+                .addPath(new BezierLine(threeshot, five))
+                .setLinearHeadingInterpolation(threeshot.getHeading(), five.getHeading()).build();
     }
 
 
 
+    //the code for one singular cycle (which in the best case should get us three balls in the thing)
+    public void roidcycle(PathChain uno, PathChain dos, PathChain tres) {
+        switch (cycleState) {
+            case 0: // Drive to initial shooting position
+                //reset all the hardware of robot
+                robot.shotMotorTwo.setVelocity(0);
+                robot.shotMotorOne.setVelocity(0);
+                
+                robot.intake.setPower(0);
+                robot.wheel.setPower(0);
+                robot.gatekeepTwo.setPosition(0.147);
+                
+                //sucessfully reset robot? maybe?
+                if (robot.shotMotorOne.getVelocity() == 0 && 
+                        robot.shotMotorTwo.getVelocity() == 0 && 
+                        robot.intake.getPower() == 0 && 
+                        robot.wheel.getPower() == 0 && 
+                        robot.gatekeepTwo.getPosition() == 0.147)
+                {
+                    telemetry.addData("Robot Reset:", " Sucessful");
+                }
+
+                setCycleState(1);
+                break;
+            case 1:
+                if (!follower.isBusy()) {
+                    follower.followPath(uno);
+                    setCycleState(2);
+                }
+                break;
+            case 2:
+                intake();
+                if (pathTimer.getElapsedTimeSeconds() > 0.5) {
+
+                    follower.followPath(dos, 0.5, true);
+                    setCycleState(3); // Now move to case 3
+                }
+                break;
+
+            case 3:
+                if (!follower.isBusy()) {
+                    follower.followPath(tres);
+                    setCycleState(4);
+                }
+                break;
+            case 4:
+                //wait for the previous thing to be done first somehow
+                outtake();
+                if (!follower.isBusy()) {
+
+                    setCycleState(5);
+                }
+                break;
+            case 5:
+                // Wait for the path to finish
+                if (!follower.isBusy()) {
+                    telemetry.addData("Another cycle completed at: ", getCoordinatesString());
+                    telemetry.update();
+                    
+                }
+                break;
+
+        }
+    }
+
+
+    //actual autonomous
+    public void autonomousPathUpdate() {
+        switch (pathState) {
+            case 0: // Drive to initial shooting position
+                follower.followPath(pathone);
+                setPathState(1);
+                break;
+            case 1:
+                roidcycle(pathtwoOne, pathtwoTwo, pathtwoThree);
+                break;
+            case 2:
+                roidcycle(pathThreeOne, pathThreeTwo, pathThreeThree);
+                break;
+        }
+    }
+
+
+
+
+
+    //override stuff kinda useless for me
     @Override
     public void init_loop() {
     }
-
-
 
 
     @Override
@@ -113,7 +204,6 @@ public class SimpleAuto extends OpMode {
         opmodeTimer.resetTimer();
         setPathState(0);
     }
-
 
 
     @Override
@@ -127,93 +217,10 @@ public class SimpleAuto extends OpMode {
         telemetry.update();
     }
 
-
-
-
-
-
-
-
-    public void autonomousPathUpdate() {
-        switch (pathState) {
-            case 0: // Drive to initial shooting position
-                follower.followPath(pathone);
-                setPathState(1);
-                break;
-            case 1:
-                if (!follower.isBusy())
-                {
-                    follower.followPath(pathtwoOne);
-                    setPathState(2);
-                }
-                break;
-            case 2:
-                intake();
-                if (pathTimer.getElapsedTimeSeconds() > 1.5) {
-
-                    follower.followPath(pathtwoTwo);
-                    setPathState(3); // Now move to case 3
-                }
-                break;
-
-            case 3:
-                if (!follower.isBusy())
-                {
-                    follower.followPath(pathtwoThree);
-                    setPathState(4);
-                }
-                break;
-            case 4:
-
-                //wait for the previous thing to be done first somehow
-                outtake();
-                if (!follower.isBusy())
-                {
-
-                    setPathState(6);
-                }
-                break;
-            case 5:
-                // Wait for the path to finish
-                if (!follower.isBusy()) {
-                    telemetry.addData("Final coordinates: ", getCoordinatesString());
-                    telemetry.update();
-                    // Path is complete, start the shooting sequence.
-                    //setPathState(2);
-                }
-                break;
-
-        }
+    public void setCycleState(int state) {
+        cycleState = state;
+        pathTimer.resetTimer();
     }
-
-
-
-
-    public void intake()
-    {
-
-        robot.gatekeepTwo.setPosition(0.75);
-
-        if (pathTimer.getElapsedTimeSeconds() > 0.5)
-        {
-            robot.intake.setPower(0.99);
-            robot.wheel.setPower(0.99);
-
-        }
-        else
-        {
-            robot.intake.setPower(0.0);
-            robot.wheel.setPower(0.0);
-        }
-
-
-        robot.gatekeepTwo.setPosition(0.147);
-
-
-
-    }
-
-
 
     public void setPathState(int state) {
         pathState = state;
@@ -222,11 +229,13 @@ public class SimpleAuto extends OpMode {
 
 
 
-
+    //intake and outtake below
     public void outtake() {
         // Start shooting motors immediately
-        robot.shotMotorTwo.setPower(0.70);
-        robot.shotMotorOne.setPower(0.70);
+        robot.velocitySetter(4000);
+        robot.velocitySetter(4000);
+
+
 
         // You mentioned intake/wheels need to be ON for outtake to work
         robot.intake.setPower(0.0);
@@ -239,17 +248,29 @@ public class SimpleAuto extends OpMode {
             robot.intake.setPower(0.99);
             robot.wheel.setPower(0.99);
         }
-        
 
 
     }
 
-    public void setCycleState(int state)
-    {
-        cycleState = state;
-        pathTimer.resetTimer();
-    }
 
+    public void intake() {
+
+        robot.gatekeepTwo.setPosition(0.147);
+
+        if (pathTimer.getElapsedTimeSeconds() > 0.5) {
+            robot.intake.setPower(0.99);
+            robot.wheel.setPower(0.99);
+
+        } else {
+            robot.intake.setPower(0.0);
+            robot.wheel.setPower(0.0);
+        }
+
+
+        robot.gatekeepTwo.setPosition(0.147);
+
+
+    }
 
 
     public String getCoordinatesString() {
@@ -258,9 +279,7 @@ public class SimpleAuto extends OpMode {
     }
 
 
-
     @Override
-    public void stop() {
-    }
+    public void stop() {}
 
 }

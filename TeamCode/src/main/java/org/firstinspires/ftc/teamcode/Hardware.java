@@ -18,6 +18,9 @@ public class Hardware {
     public DcMotor wheel;
 
 
+    public static final int TPR = 28;
+
+
 
 
 
@@ -86,9 +89,7 @@ public class Hardware {
 
 
         shotMotorOne = hwMap.get(DcMotorEx.class, "cm3");
-
         shotMotorOne.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        //shotMotorOne.setDirection(DcMotorSimple.Direction.REVERSE);
         shotMotorOne.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         shotMotorOne.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         shotMotorOne.setPower(0);
@@ -124,6 +125,37 @@ public class Hardware {
         lb.setPower(Range.clip(bl, -maxSpeed, maxSpeed));
 
     }
+
+    public double getVelocity() { return (shotMotorTwo.getVelocity() * 60)/28; }
+
+    public void velocitySetter(int velocity)
+    {
+
+        velocity = (int)RPMtoTPS(velocity);
+        shotMotorOne.setVelocity(velocity);
+        shotMotorTwo.setVelocity(velocity);
+
+
+
+    }
+
+    public void stopShooter(){
+        shotMotorTwo.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+        shotMotorOne.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+        shotMotorTwo.setPower(0);
+        shotMotorOne.setPower(0);
+
+    }
+
+    public double RPMtoTPS(int rpm){
+        return (double)(rpm*TPR)/60;
+    }
+
+
+
+
 
 
 
