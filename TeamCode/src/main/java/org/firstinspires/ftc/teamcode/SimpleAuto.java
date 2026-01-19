@@ -40,11 +40,11 @@ public class SimpleAuto extends OpMode {
     private final Pose two = new Pose(110.13, 75.67, -2.87);
     private final Pose twoshot = new Pose(134.82, 80.09, -2.95);
 
-    private final Pose three = new Pose(84.1058, 116.9029, 1.4998);
-    private final Pose threeshot = new Pose(84.087, 141.999, -1.5616);
+    private final Pose three = new Pose(131.586, 203.049, 0.09534);
+    private final Pose threeshot = new Pose(104.603, 200.133, 0.0889);
 
-    private final Pose four = new Pose(56.0182, 109.649, -1.5050);
-    private final Pose fourshot = new Pose(53.398, 139.984, -1.4834);
+    private final Pose four = new Pose(125.850, 226.728, 0.0879);
+    private final Pose fourshot = new Pose(102.22, 223.996, 0.1014);
 
 
     //five will be for shooting
@@ -108,10 +108,9 @@ public class SimpleAuto extends OpMode {
 
 
     //the code for one singular cycle (which in the best case should get us three balls in the thing)
-    public void roidcycle(PathChain uno, PathChain dos, PathChain tres) {
+    public boolean roidcycle(PathChain uno, PathChain dos, PathChain tres) {
         switch (cycleState) {
-            case 0: // Drive to initial shooting position
-                //reset all the hardware of robot
+            case 0: // Reset and prepare
                 robot.shotMotorTwo.setVelocity(0);
                 robot.shotMotorOne.setVelocity(0);
                 
@@ -148,28 +147,29 @@ public class SimpleAuto extends OpMode {
 
             case 3:
                 if (!follower.isBusy()) {
-                    follower.followPath(tres);
+                    follower.followPath(tres, 0.8, true);
                     setCycleState(4);
                 }
                 break;
             case 4:
-                //wait for the previous thing to be done first somehow
-                outtake();
-                if (!follower.isBusy()) {
-
+                // Wait for the final path of the cycle to finish
+                if (!follower.isBusy() && pathTimer.getElapsedTimeSeconds() > 0.5) {
                     setCycleState(5);
                 }
                 break;
             case 5:
-                // Wait for the path to finish
-                if (!follower.isBusy()) {
-                    telemetry.addData("Another cycle completed at: ", getCoordinatesString());
+                // Perform outtake. outtake() handles its own motor spooling timer.
+                outtake();
+                // Stay here for 1.5 seconds to allow motors to rev (1s) and shoot (0.5s)
+                if (pathTimer.getElapsedTimeSeconds() > 2.5) {
+                    telemetry.addData("Cycle Status:", " Completed");
                     telemetry.update();
-                    
+                    return true; // Signal completion to autonomousPathUpdate
                 }
                 break;
 
         }
+        return false;
     }
 
 
@@ -180,11 +180,31 @@ public class SimpleAuto extends OpMode {
                 follower.followPath(pathone);
                 setPathState(1);
                 break;
-            case 1:
-                roidcycle(pathtwoOne, pathtwoTwo, pathtwoThree);
+            case 1: // Wait for arrival
+                if (!follower.isBusy()) {
+                    setPathState(2);
+                }
                 break;
-            case 2:
-                roidcycle(pathThreeOne, pathThreeTwo, pathThreeThree);
+            case 2: // Outtake Preload
+                outtake();
+                if (pathTimer.getElapsedTimeSeconds() > 2.5) {
+                    setPathState(3);
+                }
+                break;
+            case 3: // First Pickup Cycle
+                if (roidcycle(pathtwoOne, pathtwoTwo, pathtwoThree)) {
+                    setPathState(4);
+                    setCycleState(0);
+                }
+                break;
+            case 4: // Second Pickup Cycle
+                if (roidcycle(pathThreeOne, pathThreeTwo, pathThreeThree)) {
+                    setPathState(5);
+                    setCycleState(0);
+                }
+                break;
+            case 5:
+                telemetry.addData("Auto Status", "Finished");
                 break;
         }
     }
@@ -230,11 +250,10 @@ public class SimpleAuto extends OpMode {
 
 
     //intake and outtake below
-    public void outtake() {
+    public boolean outtake() {
         // Start shooting motors immediately
-        robot.velocitySetter(4000);
-        robot.velocitySetter(4000);
-
+        robot.velocitySetter(3300);
+        robot.velocitySetter(3300);
 
 
         // You mentioned intake/wheels need to be ON for outtake to work
@@ -242,14 +261,23 @@ public class SimpleAuto extends OpMode {
         robot.wheel.setPower(0.0);
 
         robot.gatekeepTwo.setPosition(0.439);
-        // Introducing the gap: Wait 0.5s for motors to rev before opening gate
+        // Introducing the gap: Wait 1s for motors to rev before opening gate
         if (pathTimer.getElapsedTimeSeconds() > 1) {
 
             robot.intake.setPower(0.99);
             robot.wheel.setPower(0.99);
         }
 
+        if (robot.intake.getPower() == 0.99
+                && robot.wheel.getPower() == 0.99
+                && robot.gatekeepTwo.getPosition() == 0.439
+                && robot.shotMotorOne.getVelocity() != 0
+                && robot.shotMotorTwo.getVelocity() != 0)
 
+            return true;
+        else {
+            return false;
+        }
     }
 
 
@@ -267,7 +295,8 @@ public class SimpleAuto extends OpMode {
         }
 
 
-        robot.gatekeepTwo.setPosition(0.147);
+
+
 
 
     }
