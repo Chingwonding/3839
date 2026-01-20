@@ -26,20 +26,20 @@ public class SimpleAuto extends OpMode {
     private int cycleState;
 
     //paths and poses
-    private PathChain pathone, pathtwoOne, pathtwoTwo, pathtwoThree, pathThreeOne, pathThreeTwo, pathThreeThree;
+    private PathChain pathone, pathtwoOne, pathtwoTwo, pathtwoThree, pathThreeOne, pathThreeTwo, pathThreeThree, pathfourOne, pathfourTwo, pathfourThree;
     private final Pose one = new Pose(122.64, 123.25, Math.toRadians(230));
 
-    private final Pose twoshot = new Pose(130.728, 78.703, -3.069);
-    private final Pose two = new Pose(104.554, 78.256, -2.983);
+    private final Pose twoshot = new Pose(130.728, 80.175, -3.069);
+    private final Pose two = new Pose(109.426, 81.51, -3.049);
 
-    private final Pose three = new Pose(107.98, 53.4479, -3.06);
-    private final Pose threeshot = new Pose(138.323, 56.11, -2.971);
+    private final Pose three = new Pose(100.991, 56.18, -3.03);
+    private final Pose threeshot = new Pose(141.3856, 56.63, 3.136 );
 
-    private final Pose four = new Pose(125.850, 226.728, 0.0879);
-    private final Pose fourshot = new Pose(102.22, 223.996, 0.1014);
+    private final Pose fourshot = new Pose(138.839, 33.709, -3.06);
+    private final Pose four = new Pose(109.070, 32.971, -3.015);
 
     //five will be for shooting
-    private final Pose five = new Pose(99.80, 89.03, -2.399);
+    private final Pose five = new Pose(105.223, 98.614, -2.34);
 
     @Override
     public void init() {
@@ -81,6 +81,17 @@ public class SimpleAuto extends OpMode {
         pathThreeThree = follower.pathBuilder()
                 .addPath(new BezierLine(threeshot, five))
                 .setLinearHeadingInterpolation(threeshot.getHeading(), five.getHeading()).build();
+
+
+        pathfourOne = follower.pathBuilder()
+                .addPath(new BezierLine(five, four))
+                .setLinearHeadingInterpolation(five.getHeading(), four.getHeading()).build();
+        pathfourTwo = follower.pathBuilder()
+                .addPath(new BezierLine(four, fourshot))
+                .setLinearHeadingInterpolation(four.getHeading(), fourshot.getHeading()).build();
+        pathfourThree = follower.pathBuilder()
+                .addPath(new BezierLine(fourshot, five))
+                .setLinearHeadingInterpolation(fourshot.getHeading(), five.getHeading()).build();
     }
 
     public boolean roidcycle(PathChain uno, PathChain dos, PathChain tres) {
@@ -111,9 +122,10 @@ public class SimpleAuto extends OpMode {
             case 3:
                 // Wait for dos to finish before starting tres
                 if (pathTimer.getElapsedTimeSeconds() > 0.1 && !follower.isBusy()) {
-                    follower.followPath(tres, 0.8, true);
+                    follower.followPath(tres, 0.96, true);
                     setCycleState(4);
                 }
+
                 break;
             case 4:
                 // Wait for arrival at shooting position
@@ -123,7 +135,7 @@ public class SimpleAuto extends OpMode {
                 break;
             case 5:
                 outtake();
-                if (pathTimer.getElapsedTimeSeconds() > 2.5) {
+                if (pathTimer.getElapsedTimeSeconds() > 2.9) {
                     return true; // Signal completion to autonomousPathUpdate
                 }
                 break;
@@ -161,6 +173,12 @@ public class SimpleAuto extends OpMode {
                 }
                 break;
             case 5:
+                if (roidcycle(pathfourOne, pathfourTwo, pathfourThree)) {
+                    setPathState(6);
+                    setCycleState(0);
+                }
+                break;
+            case 6:
                 telemetry.addData("Auto Status", "Finished");
                 break;
         }
@@ -197,16 +215,17 @@ public class SimpleAuto extends OpMode {
     }
 
     public boolean outtake() {
-        robot.velocitySetter(3200);
+        robot.velocitySetter(3000);
         robot.intake.setPower(0.0);
         robot.wheel.setPower(0.0);
         robot.gatekeepTwo.setPosition(0.439);
 
-        if (pathTimer.getElapsedTimeSeconds() > 1) {
+        if (pathTimer.getElapsedTimeSeconds() > 0.8) {
             robot.intake.setPower(0.99);
             robot.wheel.setPower(0.99);
         }
 
+        telemetry.addData("Velocity of the shooters: ", robot.shotMotorOne.getVelocity());
         return (robot.intake.getPower() == 0.99 && robot.wheel.getPower() == 0.99);
     }
 
@@ -219,6 +238,7 @@ public class SimpleAuto extends OpMode {
             robot.intake.setPower(0.0);
             robot.wheel.setPower(0.0);
         }
+
     }
 
     public String getCoordinatesString() {
@@ -227,5 +247,7 @@ public class SimpleAuto extends OpMode {
     }
 
     @Override
-    public void stop() {}
+    public void stop() {
+        robot.gatekeepTwo.setPosition(0.147);
+    }
 }
