@@ -11,7 +11,7 @@ public class Intake {
     private Hardware robot = Hardware.getInstance();
     public void intake() {
         robot.gatekeepTwo.setPosition(0.147);
-        if (pathTimer.getElapsedTimeSeconds() > 0.5) {
+        if (pathTimer.getElapsedTimeSeconds() > 0.2) {
             robot.intake.setPower(0.99);
             robot.wheel.setPower(0.99);
         } else {
@@ -25,7 +25,7 @@ public class Intake {
     public void intake(String slow)
     {
         robot.gatekeepTwo.setPosition(0.147);
-        if (pathTimer.getElapsedTimeSeconds() > 0.5) {
+        if (pathTimer.getElapsedTimeSeconds() > 0.2) {
             robot.intake.setPower(0.60);
             robot.wheel.setPower(0.60);
         } else {
@@ -34,6 +34,16 @@ public class Intake {
         }
 
     }
+
+
+    public void intake(int zero)
+    {
+        robot.gatekeepTwo.setPosition(0.147);
+        robot.intake.setPower(0.0);
+        robot.wheel.setPower(0.0);
+
+    }
+
 
 
 

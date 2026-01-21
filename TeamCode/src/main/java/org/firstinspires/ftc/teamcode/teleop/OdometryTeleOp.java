@@ -9,6 +9,8 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.robotparts.Hardware;
+import org.firstinspires.ftc.teamcode.robotparts.Intake;
+import org.firstinspires.ftc.teamcode.robotparts.Lebron;
 
 @Config
 @TeleOp (name = "3839's tears")
@@ -24,6 +26,10 @@ public class OdometryTeleOp extends LinearOpMode {
 
     Timer timer = new Timer();
     Hardware robot = Hardware.getInstance();
+
+    Intake intake = new Intake();
+
+    Lebron lebron = new Lebron(telemetry);
     boolean robotServo;
 
     Timer pathTimer = new Timer();
@@ -82,6 +88,8 @@ public class OdometryTeleOp extends LinearOpMode {
                     outtake();
 
 
+                    lebron.goat();
+
 
 
                 }
@@ -129,12 +137,12 @@ public class OdometryTeleOp extends LinearOpMode {
                 upOrDown += 1;
                 if (upOrDown % 2 == 0)
                 {
-                    robot.intake.setPower(0.99);
+                    intake.intake();
 
                 }
                 else
                 {
-                    robot.intake.setPower(0);
+                    intake.intake(0);
                 }
 
             }
