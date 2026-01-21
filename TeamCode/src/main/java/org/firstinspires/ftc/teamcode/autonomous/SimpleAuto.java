@@ -1,14 +1,16 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.autonomous;
 
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
-import com.pedropathing.paths.Path;
 import com.pedropathing.paths.PathChain;
 import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
+import org.firstinspires.ftc.teamcode.robotparts.Hardware;
+import org.firstinspires.ftc.teamcode.robotparts.Intake;
+import org.firstinspires.ftc.teamcode.robotparts.Pewpew;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
 @Autonomous(name = "SUH FWAE FWAE Rightside", group = "Examples")
@@ -17,6 +19,8 @@ public class SimpleAuto extends OpMode {
     //initialize stuff fr
     Hardware robot = Hardware.getInstance();
     Pewpew pewpew = new Pewpew(telemetry);
+
+    Intake intake = new Intake();
     private Follower follower;
     private Timer pathTimer, opmodeTimer;
 
@@ -118,7 +122,7 @@ public class SimpleAuto extends OpMode {
                 }
                 break;
             case 2:
-                intake();
+                intake.intake();
                 // CRITICAL: Wait for uno to finish before starting dos
                 if (pathTimer.getElapsedTimeSeconds() > 0.1 && !follower.isBusy()) {
                     follower.followPath(dos, 0.8, true);
@@ -168,7 +172,7 @@ public class SimpleAuto extends OpMode {
                 }
                 break;
             case 2:
-                intake();
+                intake.intake();
                 // CRITICAL: Wait for uno to finish before starting dos
                 if (pathTimer.getElapsedTimeSeconds() > 0.1 && !follower.isBusy()) {
                     follower.followPath(dos, 0.8, true);
@@ -282,17 +286,7 @@ public class SimpleAuto extends OpMode {
 
 
 
-    public void intake() {
-        robot.gatekeepTwo.setPosition(0.147);
-        if (pathTimer.getElapsedTimeSeconds() > 0.5) {
-            robot.intake.setPower(0.99);
-            robot.wheel.setPower(0.99);
-        } else {
-            robot.intake.setPower(0.0);
-            robot.wheel.setPower(0.0);
-        }
 
-    }
 
     public String getCoordinatesString() {
         Pose currentPose = follower.getPose();
