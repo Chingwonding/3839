@@ -126,7 +126,7 @@ public class Hardware {
 
     }
 
-    public double getVelocity() { return (shotMotorTwo.getVelocity() * 60)/28; }
+    //public double getVelocity() { return (shotMotorTwo.getVelocity() * 60)/28; }
 
     public void velocitySetter(int velocity)
     {

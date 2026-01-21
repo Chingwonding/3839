@@ -16,6 +16,7 @@ public class SimpleAuto extends OpMode {
 
     //initialize stuff fr
     Hardware robot = Hardware.getInstance();
+    Pewpew pewpew = new Pewpew(telemetry);
     private Follower follower;
     private Timer pathTimer, opmodeTimer;
 
@@ -26,7 +27,7 @@ public class SimpleAuto extends OpMode {
     private int cycleState;
 
     //paths and poses
-    private PathChain pathone, pathtwoOne, pathtwoTwo, pathtwoThree, pathThreeOne, pathThreeTwo, pathThreeThree, pathfourOne, pathfourTwo, pathfourThree;
+    private PathChain pathone, pathtwoOne, pathtwoTwo, pathtwoThree, pathThreeOne, pathThreeTwo, pathThreeThree, pathThreeFour, pathfourOne, pathfourTwo, pathfourThree;
     private final Pose one = new Pose(122.64, 123.25, Math.toRadians(230));
 
     private final Pose twoshot = new Pose(130.728, 80.175, -3.069);
@@ -39,7 +40,7 @@ public class SimpleAuto extends OpMode {
     private final Pose four = new Pose(109.070, 32.971, -3.015);
 
     //five will be for shooting
-    private final Pose five = new Pose(105.223, 98.614, -2.34);
+    private final Pose five = new Pose(90.79, 83.000, -2.33);
 
     @Override
     public void init() {
@@ -79,8 +80,13 @@ public class SimpleAuto extends OpMode {
                 .setLinearHeadingInterpolation(three.getHeading(), threeshot.getHeading()).build();
 
         pathThreeThree = follower.pathBuilder()
-                .addPath(new BezierLine(threeshot, five))
-                .setLinearHeadingInterpolation(threeshot.getHeading(), five.getHeading()).build();
+                .addPath(new BezierLine(threeshot, three))
+                .setLinearHeadingInterpolation(threeshot.getHeading(), three.getHeading()).build();
+
+        pathThreeFour = follower.pathBuilder()
+                .addPath(new BezierLine(three, five))
+                .setLinearHeadingInterpolation(three.getHeading(), five.getHeading()).build();
+
 
 
         pathfourOne = follower.pathBuilder()
@@ -115,7 +121,7 @@ public class SimpleAuto extends OpMode {
                 intake();
                 // CRITICAL: Wait for uno to finish before starting dos
                 if (pathTimer.getElapsedTimeSeconds() > 0.1 && !follower.isBusy()) {
-                    follower.followPath(dos, 0.5, true);
+                    follower.followPath(dos, 0.8, true);
                     setCycleState(3);
                 }
                 break;
@@ -134,8 +140,66 @@ public class SimpleAuto extends OpMode {
                 }
                 break;
             case 5:
-                outtake();
+                pewpew.outtake();
                 if (pathTimer.getElapsedTimeSeconds() > 2.9) {
+                    return true; // Signal completion to autonomousPathUpdate
+                }
+                break;
+        }
+        return false;
+    }
+
+
+    public boolean roidcycle(PathChain uno, PathChain dos, PathChain tres, PathChain quatro) {
+        switch (cycleState) {
+            case 0: // Reset and prepare
+                robot.shotMotorTwo.setVelocity(0);
+                robot.shotMotorOne.setVelocity(0);
+                robot.intake.setPower(0);
+                robot.wheel.setPower(0);
+                robot.gatekeepTwo.setPosition(0.147);
+                setCycleState(1);
+                break;
+            case 1:
+                // Wait for any previous movement to stop, then start uno
+                if (pathTimer.getElapsedTimeSeconds() > 0.1 && !follower.isBusy()) {
+                    follower.followPath(uno);
+                    setCycleState(2);
+                }
+                break;
+            case 2:
+                intake();
+                // CRITICAL: Wait for uno to finish before starting dos
+                if (pathTimer.getElapsedTimeSeconds() > 0.1 && !follower.isBusy()) {
+                    follower.followPath(dos, 0.8, true);
+                    setCycleState(3);
+                }
+                break;
+            case 3:
+                // Wait for dos to finish before starting tres
+                if (pathTimer.getElapsedTimeSeconds() > 0.1 && !follower.isBusy()) {
+                    follower.followPath(tres, 0.96, true);
+                    setCycleState(4);
+                }
+
+                break;
+            case 4:
+                // tres should be finished by now
+                if (pathTimer.getElapsedTimeSeconds() > 0.1 && !follower.isBusy()) {
+                    setCycleState(5);
+                }
+                break;
+
+            case 5:
+                //quatro begins
+                if (pathTimer.getElapsedTimeSeconds() > 0.1 && !follower.isBusy()) {
+                    follower.followPath(quatro);
+                    setCycleState(6);
+                }
+            case 6:
+                //quatro ends and outtake begins
+                pewpew.outtake();
+                if (pathTimer.getElapsedTimeSeconds() > 5) {
                     return true; // Signal completion to autonomousPathUpdate
                 }
                 break;
@@ -155,8 +219,8 @@ public class SimpleAuto extends OpMode {
                 }
                 break;
             case 2: // Outtake Preload
-                outtake();
-                if (pathTimer.getElapsedTimeSeconds() > 2.5) {
+                pewpew.outtake("individuals fr");
+                if (pathTimer.getElapsedTimeSeconds() > 6.5) {
                     setPathState(3);
                 }
                 break;
@@ -167,7 +231,7 @@ public class SimpleAuto extends OpMode {
                 }
                 break;
             case 4: // Second Pickup Cycle
-                if (roidcycle(pathThreeOne, pathThreeTwo, pathThreeThree)) {
+                if (roidcycle(pathThreeOne, pathThreeTwo, pathThreeThree, pathThreeFour)) {
                     setPathState(5);
                     setCycleState(0);
                 }
@@ -214,20 +278,9 @@ public class SimpleAuto extends OpMode {
         pathTimer.resetTimer();
     }
 
-    public boolean outtake() {
-        robot.velocitySetter(3000);
-        robot.intake.setPower(0.0);
-        robot.wheel.setPower(0.0);
-        robot.gatekeepTwo.setPosition(0.439);
 
-        if (pathTimer.getElapsedTimeSeconds() > 0.8) {
-            robot.intake.setPower(0.99);
-            robot.wheel.setPower(0.99);
-        }
 
-        telemetry.addData("Velocity of the shooters: ", robot.shotMotorOne.getVelocity());
-        return (robot.intake.getPower() == 0.99 && robot.wheel.getPower() == 0.99);
-    }
+
 
     public void intake() {
         robot.gatekeepTwo.setPosition(0.147);

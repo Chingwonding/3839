@@ -3,6 +3,8 @@ package org.firstinspires.ftc.teamcode;
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
+import com.pedropathing.control.PIDFCoefficients;
+import com.pedropathing.control.PIDFController;
 import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -23,22 +25,32 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 
 @Config
-@TeleOp (name = "3839's tears")
-public class OdometryTeleOp extends LinearOpMode {
+@TeleOp (name = "PIDF tester")
+public class PIDFTESTER extends LinearOpMode {
 
     public static double kP = 0, kI = 0, kD = 0, kF = 0;
 
     private ElapsedTime runtime = new ElapsedTime();
 
+    //DcMotorEx motor2;
+    //DcMotorEx motor1;
+
+
+
     public int speed = 3500;
+    public PIDFController controller = new PIDFController(new PIDFCoefficients(kP, kI, kD, kF));
 
 
 
     Timer timer = new Timer();
+    Pewpew pewpew = new Pewpew(telemetry);
+
     Hardware robot = Hardware.getInstance();
     boolean robotServo;
 
     Timer pathTimer = new Timer();
+    @Override
+
 
     //main run method
     public void runOpMode() {
@@ -72,10 +84,15 @@ public class OdometryTeleOp extends LinearOpMode {
 
 
 
+
+
         double velocity;
 
         waitForStart();
         while (opModeIsActive()) {
+            controller = new PIDFController(new PIDFCoefficients(kP, kI, kD, kF));
+
+
 
             //for driving and strafing, hopefully
             drive(-(Math.atan(5 * -gamepad1.left_stick_y) / Math.atan(5)),
@@ -91,7 +108,8 @@ public class OdometryTeleOp extends LinearOpMode {
                 if (shotOrNah % 2 == 0) {
 
 
-                    outtake();
+                    robot.shotMotorOne.setVelocity(4000);
+                    robot.shotMotorTwo.setVelocity(4000);
 
 
 
@@ -109,7 +127,7 @@ public class OdometryTeleOp extends LinearOpMode {
                 servoCount += 1;
                 if(servoCount % 2 == 0) {
                     robotServo = true;
-                    robot.gatekeepTwo.setPosition(0.45);
+                    robot.gatekeepTwo.setPosition(0.439);
                     //robot.gatekeepOne.setPosition(1.4);
                     timer.resetTimer();
 
@@ -117,7 +135,7 @@ public class OdometryTeleOp extends LinearOpMode {
                 else {
                     robotServo = false;
                     //robot.gatekeepOne.setPosition(0.3);
-                    robot.gatekeepTwo.setPosition(0.75);
+                    robot.gatekeepTwo.setPosition(0.147);
 
 
                 }
@@ -169,7 +187,7 @@ public class OdometryTeleOp extends LinearOpMode {
                 }
 
 
-                outtake();
+                pewpew.outtake();
 
             }
 
@@ -184,6 +202,13 @@ public class OdometryTeleOp extends LinearOpMode {
 
 
 
+
+            double sped = robot.shotMotorTwo.getVelocity();
+            double sped2 = robot.shotMotorOne.getVelocity();
+
+            telemetry.addData("Motor one: ", sped);
+            telemetry.addData("Motor two: ", sped2);
+            telemetry.update();
 
 
 

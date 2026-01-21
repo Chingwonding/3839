@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.pedropathing.control.PIDFController;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -83,6 +84,8 @@ public class SecondAuto extends LinearOpMode {
         robot.rb.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.lb.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         // tells it to run to certain number of ticks
+
+        //PIDFController
 
         robot.setPower(speed, speed, -speed, -speed);
         while (opModeIsActive() && robot.lb.isBusy()){
