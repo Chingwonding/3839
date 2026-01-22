@@ -29,10 +29,10 @@ public class Lebron {
                 "Lebron or Jordan\n" +
                 "I keep thinking\n" +
                 "You are my sunshine\n" +
-                "My only sinshine\n" +
+                "My only sunshine\n" +
                 "That is why you are the goat\n" +
                 "The goat of all goats\n" +
-                "my glorius king");
+                "my glorius king :)");
     }
 
 }

@@ -103,7 +103,6 @@ public class SimpleAuto extends OpMode {
                 .addPath(new BezierLine(fourshot, five))
                 .setLinearHeadingInterpolation(fourshot.getHeading(), five.getHeading()).build();
     }
-
     public boolean roidcycle(PathChain uno, PathChain dos, PathChain tres) {
         switch (cycleState) {
             case 0: // Reset and prepare
@@ -144,7 +143,7 @@ public class SimpleAuto extends OpMode {
                 }
                 break;
             case 5:
-                pewpew.outtake();
+                pewpew.outtake(pathTimer);
                 if (pathTimer.getElapsedTimeSeconds() > 2.9) {
                     return true; // Signal completion to autonomousPathUpdate
                 }
@@ -202,7 +201,7 @@ public class SimpleAuto extends OpMode {
                 }
             case 6:
                 //quatro ends and outtake begins
-                pewpew.outtake();
+                pewpew.outtake(pathTimer);
                 if (pathTimer.getElapsedTimeSeconds() > 5) {
                     return true; // Signal completion to autonomousPathUpdate
                 }

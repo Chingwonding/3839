@@ -3,6 +3,8 @@ package org.firstinspires.ftc.teamcode.robotparts;
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.pedropathing.util.Timer;
+import com.qualcomm.robotcore.util.ElapsedTime;
+
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 public class Pewpew {
@@ -11,13 +13,6 @@ public class Pewpew {
     private Telemetry telemetry;
     private Hardware robot = Hardware.getInstance();
 
-
-
-    /**
-     * Constructor for Pewpew. 
-     * Passing the OpMode's telemetry allows us to use MultipleTelemetry to send data
-     * to both the Driver Station and the FTC Dashboard.
-     */
     public Pewpew(Telemetry opModeTelemetry) {
         this.telemetry = new MultipleTelemetry(opModeTelemetry, FtcDashboard.getInstance().getTelemetry());
     }
@@ -29,8 +24,6 @@ public class Pewpew {
     // Individual outtakes sequence
     public boolean outtake(String separate) {
         robot.velocitySetter(3800);
-        robot.intake.setPower(0.0);
-        robot.wheel.setPower(0.0);
         robot.gatekeepTwo.setPosition(0.439);
 
         double time = pathTimer.getElapsedTimeSeconds();
@@ -57,31 +50,35 @@ public class Pewpew {
             robot.intake.setPower(0.99);
         }
 
-        // Send velocity data to Dashboard for graphing
         telemetry.addData("Shot1Velocity", robot.shotMotorOne.getVelocity());
         telemetry.addData("Shot2Velocity", robot.shotMotorTwo.getVelocity());
         
-        return (time > 6.5); // Example return condition
+        return (time > 6.5);
     }
 
-    // All at once outtake
-
-
-    public boolean outtake() {
+    public boolean outtake(Timer timer) {
         robot.velocitySetter(3800);
-        robot.intake.setPower(0.0);
-        robot.wheel.setPower(0.0);
         robot.gatekeepTwo.setPosition(0.439);
 
-        if (pathTimer.getElapsedTimeSeconds() > 0.8) {
+        if (timer.getElapsedTimeSeconds() > 1.3) {
             robot.intake.setPower(0.99);
             robot.wheel.setPower(0.99);
+        } else {
+            robot.intake.setPower(0.0);
+            robot.wheel.setPower(0.0);
         }
 
-        // Send velocity data to Dashboard for graphing
         telemetry.addData("Shot1Velocity", robot.shotMotorOne.getVelocity());
         telemetry.addData("Shot2Velocity", robot.shotMotorTwo.getVelocity());
         
         return (robot.intake.getPower() == 0.99 && robot.wheel.getPower() == 0.99);
+    }
+
+    public void reset() {
+        robot.shotMotorTwo.setVelocity(0);
+        robot.shotMotorOne.setVelocity(0);
+        robot.intake.setPower(0);
+        robot.wheel.setPower(0);
+        robot.gatekeepTwo.setPosition(0.147);
     }
 }
