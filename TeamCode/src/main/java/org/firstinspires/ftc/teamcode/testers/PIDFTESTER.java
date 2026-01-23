@@ -8,6 +8,7 @@ import com.pedropathing.control.PIDFController;
 import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.robotparts.Hardware;
@@ -28,7 +29,6 @@ public class PIDFTESTER extends LinearOpMode {
 
     Hardware robot = Hardware.getInstance();
     boolean isShooting = false;
-
     @Override
     public void runOpMode() {
         // Initialize pewpew here to avoid NullPointerExceptions
@@ -55,19 +55,20 @@ public class PIDFTESTER extends LinearOpMode {
                 isShooting = !isShooting;
                 if (isShooting) {
                     timer.resetTimer();
-                } else {
-                    pewpew.reset();
                 }
-            }
 
+            }
             // Continuously call outtake while in shooting state
             if (isShooting) {
                 pewpew.outtake(timer);
             }
+            else
+            {
+                pewpew.reset();
+            }
 
             double sped = robot.shotMotorTwo.getVelocity();
             double sped2 = robot.shotMotorOne.getVelocity();
-
             telemetry.addData("Is Shooting", isShooting);
             telemetry.addData("Timer", timer.getElapsedTimeSeconds());
             telemetry.addData("Motor one velocity", sped2);
@@ -75,6 +76,7 @@ public class PIDFTESTER extends LinearOpMode {
             telemetry.update();
         }
     }
+
 
     public void drive(double forward, double right, double rotate) {
         double frontLeftPower = forward + right + rotate;
