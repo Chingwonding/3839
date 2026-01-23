@@ -57,7 +57,7 @@ public class Pewpew {
     }
 
     public boolean outtake(Timer timer) {
-        robot.velocitySetter(5500);
+        robot.velocitySetter(3300);
         robot.gatekeepTwo.setPosition(0.439);
 
         if (timer.getElapsedTimeSeconds() > 1.3) {
