@@ -39,16 +39,19 @@ public class OdometryTeleOp extends LinearOpMode {
     boolean robotServo;
     Timer pathTimer = new Timer();
     private boolean lastRT = false;
-    private boolean shot = false;
+    private boolean shotlong = false;
+    private boolean shotshort = false;
     private boolean intaking = false;
     private boolean longshotfollower = false;
+
+    private boolean shortshotfollower = false;
 
     //long shoot pose and short shooting pose
     private Pose currentPosition;
     private final Pose longshot = new Pose(56, 36, Math.toRadians(75));
     private final Pose shortshot = new Pose(91.5, 100, Math.toRadians(45));
     public final Pose endAutoPose = new Pose(90.79, 83.000, -2.33);
-    public PathChain pathone;
+    public PathChain pathone, pathtwo;
     @Override
     public void runOpMode() {
         // 1. Initialize Telemetry first
@@ -71,36 +74,29 @@ public class OdometryTeleOp extends LinearOpMode {
                     (Math.atan(5 * -gamepad1.left_stick_x) / Math.atan(5)),
                     (Math.atan(5 * -gamepad1.right_stick_x) / Math.atan(5)) * 0.8);
 
+
+            //getting input
             // Shooting Toggle (Edge Detection)
             if (gamepad1.xWasPressed()) { // Trigger was just pulled
-                shot = !shot;
-                if (shot) {
+                shotlong = !shotlong;
+                if (shotlong) {
                     timer.resetTimer(); // Reset timer only when the shot sequence starts
                 }
             }
+
+            if (gamepad1.aWasPressed())
+            {
+                shotshort = !shotshort;
+                if (shotshort)
+                {
+                    timer.resetTimer();
+                }
+            }
+
+
             if (gamepad2.right_bumper) {
                 intaking = !intaking;
             }
-
-
-
-            // Execute shooting state
-            if (shot) {
-                pewpew.outtake(timer);
-            } else {
-                pewpew.reset();
-            }
-
-            if (intaking)
-            {
-                intake.intake();
-            }
-            
-            telemetry.addData("Shot Mode", shot ? "ON" : "OFF");
-            telemetry.update();
-
-            //alright so I want to code this thing that
-            //takes the current robot position and the heading and goes there
 
             if (gamepad1.leftBumperWasPressed())
             {
@@ -108,16 +104,77 @@ public class OdometryTeleOp extends LinearOpMode {
                 longshotfollower = !longshotfollower;
             }
 
+            if (gamepad1.rightBumperWasPressed())
+            {
+                shortshotfollower = !shortshotfollower;
+            }
+
+
+
+
+            //interpreting booleans
+            // Execute shooting state
+            if (shotlong) {
+                pewpew.outtake(timer, 's');
+            } else {
+                pewpew.reset();
+            }
+            if (shotshort)
+            {
+                pewpew.outtake(timer);
+            }
+
+
+            if (intaking)
+            {
+                intake.intake();
+            }
+            telemetry.update();
+
+            //alright so I want to code this thing that
+            //takes the current robot position and the heading and goes there
+
+
             //then it happens?
 
-            if (longshotfollower)
+            //then IT happens
+            if (longshotfollower || shortshotfollower)
             {
                 currentPosition = follower.getPose();
                 //how do I return the value it got
-
                 buildpaths();
-                follower.followPath(pathone);
+                if (longshotfollower)
+                {
+                    follower.followPath(pathone);
+                }
+                else if (shortshotfollower)
+                {
+                    follower.followPath(pathtwo);
+
+                }
+                else
+                {
+                    telemetry.addLine("Something went wrong, debug");
+                }
                 follower.update();
+
+                if (!follower.isBusy())
+                {
+                    timer.resetTimer();
+                }
+            }
+
+
+
+
+            //safety check
+            if (longshotfollower && shortshotfollower)
+            {
+                longshotfollower = false;
+                shortshotfollower = false;
+
+                follower.breakFollowing();
+
             }
 
         }
@@ -142,6 +199,12 @@ public class OdometryTeleOp extends LinearOpMode {
                 .addPath(new BezierLine(currentPosition, longshot))
                 .setLinearHeadingInterpolation(currentPosition.getHeading(),
                         longshot.getHeading()).build();
+
+        pathtwo = follower.pathBuilder()
+                .addPath(new BezierLine(currentPosition, endAutoPose))
+                .setLinearHeadingInterpolation(currentPosition.getHeading(),
+                        endAutoPose.getHeading()).build();
+
     }
 
 }

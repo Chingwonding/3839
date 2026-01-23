@@ -57,7 +57,7 @@ public class Pewpew {
     }
 
     public boolean outtake(Timer timer) {
-        robot.velocitySetter(3800);
+        robot.velocitySetter(5500);
         robot.gatekeepTwo.setPosition(0.439);
 
         if (timer.getElapsedTimeSeconds() > 1.3) {
@@ -73,6 +73,28 @@ public class Pewpew {
         
         return (robot.intake.getPower() == 0.99 && robot.wheel.getPower() == 0.99);
     }
+
+
+    public boolean outtake(Timer timer, char s)
+    {
+        robot.velocitySetter(5000);
+        robot.gatekeepTwo.setPosition(0.439);
+
+        if (timer.getElapsedTimeSeconds() > 1.3) {
+            robot.intake.setPower(0.99);
+            robot.wheel.setPower(0.99);
+        } else {
+            robot.intake.setPower(0.0);
+            robot.wheel.setPower(0.0);
+        }
+
+        telemetry.addData("Shot1Velocity", robot.shotMotorOne.getVelocity());
+        telemetry.addData("Shot2Velocity", robot.shotMotorTwo.getVelocity());
+
+        return (robot.intake.getPower() == 0.99 && robot.wheel.getPower() == 0.99);
+
+    }
+
 
     public void reset() {
         robot.shotMotorTwo.setVelocity(0);
