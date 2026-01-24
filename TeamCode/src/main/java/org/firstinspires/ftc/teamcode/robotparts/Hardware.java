@@ -94,12 +94,15 @@ public class Hardware {
         shotMotorOne.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         shotMotorOne.setPower(0);
 
+
+        //is shotmotor two cooked?
         shotMotorTwo = hwMap.get(DcMotorEx.class, "em3");
         shotMotorTwo.setDirection(DcMotorSimple.Direction.REVERSE);
         shotMotorTwo.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         shotMotorTwo.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         shotMotorTwo.setZeroPowerBehavior((DcMotor.ZeroPowerBehavior.BRAKE));
         shotMotorTwo.setPower(0);
+
 
         //control hub
         gatekeepTwo = hwMap.get(Servo.class, "es00");
@@ -126,8 +129,7 @@ public class Hardware {
 
     }
 
-    //public double getVelocity() { return (shotMotorTwo.getVelocity() * 60)/28; }
-
+    public double getVelocity() { return (shotMotorTwo.getVelocity() * 60)/28; }
     public void velocitySetter(int velocity)
     {
 
@@ -135,18 +137,13 @@ public class Hardware {
         shotMotorOne.setVelocity(velocity);
         shotMotorTwo.setVelocity(velocity);
 
-
-
     }
 
     public void stopShooter(){
         shotMotorTwo.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-
         shotMotorOne.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-
         shotMotorTwo.setPower(0);
         shotMotorOne.setPower(0);
-
     }
 
     public double RPMtoTPS(int rpm){

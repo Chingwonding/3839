@@ -19,8 +19,8 @@ import org.firstinspires.ftc.teamcode.robotparts.Lebron;
 import org.firstinspires.ftc.teamcode.robotparts.Pewpew;
 
 @Config
-@TeleOp (name = "3839's tears right side Teleop")
-public class OdometryTeleOp extends LinearOpMode {
+@TeleOp (name = "TestTeleop")
+public class TestTeleop extends LinearOpMode {
 
     public static double kP = 0, kI = 0, kD = 0, kF = 0;
     private ElapsedTime runtime = new ElapsedTime();
@@ -29,15 +29,15 @@ public class OdometryTeleOp extends LinearOpMode {
     Timer timer = new Timer();
     Hardware robot = Hardware.getInstance();
     Intake intake = new Intake();
-    
+
     // Pedro Pathing Follower
     private Follower follower;
-    
+
     Pewpew pewpew;
     Lebron lebron;
     boolean robotServo;
     Timer pathTimer = new Timer();
-    
+
     private boolean shotlong = false;
     private boolean shotshort = false;
     private boolean intaking = false;
@@ -47,16 +47,14 @@ public class OdometryTeleOp extends LinearOpMode {
     private final Pose longshot = new Pose(56, 36, Math.toRadians(75));
     private final Pose shortshot = new Pose(91.5, 100, Math.toRadians(45));
     public final Pose endAutoPose = new Pose(90.79, 83.000, -2.33);
-    
     public PathChain pathone, pathtwo;
-
     @Override
     public void runOpMode() {
-        // 1. Initialize Telemetry and Follower FIRST to avoid NullPointerException
+        // 1. Initialize Telemetry and Follower FIRST
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
         follower = Constants.createFollower(hardwareMap);
         follower.setStartingPose(new Pose(90.79, 83.000, -2.33));
-        
+
         // 2. Initialize other parts
         pewpew = new Pewpew(telemetry);
         lebron = new Lebron(telemetry);
@@ -64,41 +62,38 @@ public class OdometryTeleOp extends LinearOpMode {
 
         telemetry.addData("Status", "Hello Drivers");
         telemetry.update();
-        
+
         waitForStart();
-        
+
         // Ensure we start in TeleOp drive mode
         follower.startTeleopDrive();
 
         while (opModeIsActive()) {
-            // 1. Update localization (and Pedro's internal PID states)
+            // Check for manual override: if sticks are moved, break any automated following/holding
+            if (Math.abs(gamepad1.left_stick_y) > 0.1 || Math.abs(gamepad1.left_stick_x) > 0.1 || Math.abs(gamepad1.right_stick_x) > 0.1) {
+                if (follower.isBusy()) {
+                    follower.breakFollowing();
+                }
+            }
+
+            // Always calculate and set TeleOp drive vectors
+            double scaleFactor = Math.max(Math.abs(1 - gamepad1.right_trigger), 0.2);
+            follower.setTeleOpDrive(
+                    -(Math.atan(5 * -gamepad1.left_stick_y) / Math.atan(5)) * scaleFactor,
+                    (Math.atan(5 * -gamepad1.left_stick_x) / Math.atan(5)) * scaleFactor,
+                    (Math.atan(5 * -gamepad1.right_stick_x) / Math.atan(5)) * 0.8 * scaleFactor,
+                    true
+            );
+
+            // Update follower to apply the drive vectors or follow the current path
             follower.update();
-
-            // 2. Manual Override: Detect if the driver is trying to take control
-            boolean isManual = Math.abs(gamepad1.left_stick_y) > 0.1 || 
-                               Math.abs(gamepad1.left_stick_x) > 0.1 || 
-                               Math.abs(gamepad1.right_stick_x) > 0.1;
-
-            if (isManual && follower.isBusy()) {
-                // If the driver moves the sticks, stop any automated movement or "Hold" state
-                follower.breakFollowing();
-                follower.startTeleopDrive();
-            }
-
-            // 3. Drive logic: If we aren't busy with a path (manual or finished), take over.
-            // We call drive() AFTER update() so our motor powers overwrite Pedro's powers.
-            if (!follower.isBusy() || isManual) {
-                drive(-(Math.atan(5 * -gamepad1.left_stick_y) / Math.atan(5)),
-                        (Math.atan(5 * -gamepad1.left_stick_x) / Math.atan(5)),
-                        (Math.atan(5 * -gamepad1.right_stick_x) / Math.atan(5)) * 0.8);
-            }
 
             // Toggle Shooting
             if (gamepad1.xWasPressed()) {
                 shotlong = !shotlong;
                 if (shotlong) {
                     timer.resetTimer();
-                    shotshort = false; // Mutually exclusive
+                    shotshort = false;
                 }
             }
 
@@ -155,19 +150,6 @@ public class OdometryTeleOp extends LinearOpMode {
             telemetry.addData("Busy", follower.isBusy());
             telemetry.update();
         }
-    }
-
-    public void drive(double forward, double right, double rotate) {
-        double frontLeftPower = forward + right + rotate;
-        double frontRightPower = forward - right - rotate;
-        double backRightPower = forward + right - rotate;
-        double backLeftPower = forward - right + rotate;
-
-        double max = Math.max(Math.abs(frontRightPower), Math.max(Math.abs(backLeftPower), Math.max(Math.abs(frontLeftPower), Math.abs(backRightPower))));
-        double scaleFactor = (max > 1) ? 1 / max : 1;
-        
-        scaleFactor *= Math.max(Math.abs(1 - gamepad1.right_trigger), 0.2);
-        robot.setPower((frontRightPower) * scaleFactor, (backRightPower) * scaleFactor, (backLeftPower) * scaleFactor, (frontLeftPower) * scaleFactor);
     }
 
     public void buildpaths() {

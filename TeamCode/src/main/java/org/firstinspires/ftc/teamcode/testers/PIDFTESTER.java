@@ -18,37 +18,35 @@ import org.firstinspires.ftc.teamcode.robotparts.Pewpew;
 @TeleOp (name = "PIDF tester")
 public class PIDFTESTER extends LinearOpMode {
 
-    public static double kP = 0, kI = 0, kD = 0, kF = 0;
+    public static int targetVelocity = 3500;
 
     private ElapsedTime runtime = new ElapsedTime();
     public int speed = 3500;
-    public PIDFController controller = new PIDFController(new PIDFCoefficients(kP, kI, kD, kF));
+
 
     Timer timer = new Timer();
-    Pewpew pewpew; // Moved initialization to runOpMode
+    Pewpew pewpew;
 
     Hardware robot = Hardware.getInstance();
     boolean isShooting = false;
     @Override
     public void runOpMode() {
-        // Initialize pewpew here to avoid NullPointerExceptions
         pewpew = new Pewpew(telemetry);
-        
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
         robot.init(hardwareMap);
         
         telemetry.addData("Status", "Hello Drivers");
         telemetry.update();
 
+
         waitForStart();
         
         while (opModeIsActive()) {
-            // Update coefficients from Dashboard instead of re-creating the controller
-            controller.setCoefficients(new PIDFCoefficients(kP, kI, kD, kF));
 
             drive(-(Math.atan(5 * -gamepad1.left_stick_y) / Math.atan(5)),
                     (Math.atan(5 * -gamepad1.left_stick_x) / Math.atan(5)),
                     (Math.atan(5 * -gamepad1.right_stick_x) / Math.atan(5)) * 0.8);
+
 
             // Toggle Shooting State with X
             if (gamepad2.xWasPressed()) {
@@ -58,25 +56,21 @@ public class PIDFTESTER extends LinearOpMode {
                 }
 
             }
-            // Continuously call outtake while in shooting state
             if (isShooting) {
-                pewpew.outtake(timer);
+                pewpew.outtake(timer, targetVelocity);
             }
-            else
+            if (!isShooting)
             {
                 pewpew.reset();
             }
 
-            double sped = robot.shotMotorTwo.getVelocity();
-            double sped2 = robot.shotMotorOne.getVelocity();
-            telemetry.addData("Is Shooting", isShooting);
-            telemetry.addData("Timer", timer.getElapsedTimeSeconds());
-            telemetry.addData("Motor one velocity", sped2);
-            telemetry.addData("Motor two velocity", sped);
+            double velo = robot.getVelocity();
+            telemetry.addData("Shotmotortwo velocity: ", velo);
+            telemetry.addData("Intake:", robot.intake.getPower() * 435);
+            telemetry.addData("Wheel: ", robot.wheel.getPower() * 435);
             telemetry.update();
         }
     }
-
 
     public void drive(double forward, double right, double rotate) {
         double frontLeftPower = forward + right + rotate;
