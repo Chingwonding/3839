@@ -3,12 +3,9 @@ package org.firstinspires.ftc.teamcode.testers;
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
-import com.pedropathing.control.PIDFCoefficients;
-import com.pedropathing.control.PIDFController;
 import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.robotparts.Hardware;
@@ -16,12 +13,12 @@ import org.firstinspires.ftc.teamcode.robotparts.Pewpew;
 
 @Config
 @TeleOp (name = "PIDF tester")
-public class PIDFTESTER extends LinearOpMode {
+public class ShootingTester extends LinearOpMode {
 
     public static int targetVelocity = 3500;
 
     private ElapsedTime runtime = new ElapsedTime();
-    public int speed = 3500;
+    public int speed = 3800;
 
 
     Timer timer = new Timer();

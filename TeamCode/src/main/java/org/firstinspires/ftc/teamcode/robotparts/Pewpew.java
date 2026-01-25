@@ -72,8 +72,8 @@ public class Pewpew {
         }
         if (timer.getElapsedTimeSeconds() > 1.35)
         {
-            //robot.intake.setPower(0.85);
-            //robot.wheel.setPower(0.85);
+            robot.intake.setPower(0.85);
+            robot.wheel.setPower(0.85);
             robot.velocitySetter(velocity - 550);
 
 
@@ -99,11 +99,11 @@ public class Pewpew {
         robot.gatekeepTwo.setPosition(0.439);
 
         if (time > 1.5) {
-            robot.intake.setPower(0.7);
-            robot.wheel.setPower(0.7);
-        } else if (time > 1.3) {
             robot.intake.setPower(0.99);
             robot.wheel.setPower(0.99);
+        } else if (time > 1.3) {
+            robot.intake.setPower(0.80);
+            robot.wheel.setPower(0.80);
         } else {
             robot.intake.setPower(0.0);
             robot.wheel.setPower(0.0);

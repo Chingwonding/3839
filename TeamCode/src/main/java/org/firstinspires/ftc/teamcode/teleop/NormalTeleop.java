@@ -10,33 +10,27 @@ import com.pedropathing.paths.PathChain;
 import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 import org.firstinspires.ftc.teamcode.robotparts.Hardware;
 import org.firstinspires.ftc.teamcode.robotparts.Intake;
 import org.firstinspires.ftc.teamcode.robotparts.Lebron;
 import org.firstinspires.ftc.teamcode.robotparts.Pewpew;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 @Config
-@TeleOp (name = "TestTeleop")
-public class TestTeleop extends LinearOpMode {
+@TeleOp (name = "3839's tears right side Teleop")
+public class NormalTeleop extends LinearOpMode {
 
-    public static double kP = 0, kI = 0, kD = 0, kF = 0;
-    private ElapsedTime runtime = new ElapsedTime();
     public int speed = 3500;
 
     Timer timer = new Timer();
     Hardware robot = Hardware.getInstance();
     Intake intake = new Intake();
-
-    // Pedro Pathing Follower
     private Follower follower;
 
     Pewpew pewpew;
     Lebron lebron;
-    boolean robotServo;
-    Timer pathTimer = new Timer();
 
     private boolean shotlong = false;
     private boolean shotshort = false;
@@ -45,13 +39,20 @@ public class TestTeleop extends LinearOpMode {
     // Shooting poses
     private Pose currentPosition;
     private final Pose longshot = new Pose(56, 36, Math.toRadians(75));
-    private final Pose shortshot = new Pose(91.5, 100, Math.toRadians(45));
+    //private final Pose shortshot = new Pose(91.5, 100, Math.toRadians(45));
     public final Pose endAutoPose = new Pose(90.79, 83.000, -2.33);
+
     public PathChain pathone, pathtwo;
 
     @Override
     public void runOpMode() {
-        // 1. Initialize Telemetry and Follower FIRST
+
+        drive(-(Math.atan(5 * -gamepad1.left_stick_y) / Math.atan(5)),
+                (Math.atan(5 * -gamepad1.left_stick_x) / Math.atan(5)),
+                (Math.atan(5 * -gamepad1.right_stick_x) / Math.atan(5)) * 0.8);
+
+
+        // 1. Initialize Telemetry and Follower FIRST to avoid NullPointerException
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
         follower = Constants.createFollower(hardwareMap);
         follower.setStartingPose(new Pose(90.79, 83.000, -2.33));
@@ -66,39 +67,15 @@ public class TestTeleop extends LinearOpMode {
 
         waitForStart();
 
-        // Ensure we start in TeleOp drive mode
-        follower.startTeleopDrive();
-
         while (opModeIsActive()) {
-            // Check for manual override: if sticks are moved, break any automated following/holding
-            if (Math.abs(gamepad1.left_stick_y) > 0.1 || Math.abs(gamepad1.left_stick_x) > 0.1 || Math.abs(gamepad1.right_stick_x) > 0.1) {
-                if (follower.isBusy()) {
-                    follower.breakFollowing();
-                    follower.startTeleopDrive();
-                }
-            }
 
-            // Always calculate and set TeleOp drive vectors
-            double scaleFactor = Math.max(Math.abs(1 - gamepad1.right_trigger), 0.2);
-            follower.setTeleOpDrive(
-                    -(Math.atan(5 * -gamepad1.left_stick_y) / Math.atan(5)) * scaleFactor,
-                    (Math.atan(5 * -gamepad1.left_stick_x) / Math.atan(5)) * scaleFactor,
-                    (Math.atan(5 * -gamepad1.right_stick_x) / Math.atan(5)) * 0.8 * scaleFactor,
-                    true
-            );
-
-            // Update follower to apply the drive vectors or follow the current path
-            follower.update();
-
-            // Toggle Shooting
             if (gamepad1.xWasPressed()) {
                 shotlong = !shotlong;
                 if (shotlong) {
                     timer.resetTimer();
-                    shotshort = false;
+                    shotshort = false; // Mutually exclusive
                 }
             }
-
             if (gamepad1.aWasPressed()) {
                 shotshort = !shotshort;
                 if (shotshort) {
@@ -106,40 +83,16 @@ public class TestTeleop extends LinearOpMode {
                     shotlong = false;
                 }
             }
-
+            //intake in general
             if (gamepad2.right_bumper) {
                 intaking = !intaking;
             }
 
-            // Path Following Triggers - Bumpers now also act as a break if already busy
+            // Path Following Triggers
             if (gamepad1.leftBumperWasPressed()) {
-                if (follower.isBusy()) {
-                    follower.breakFollowing();
-                    follower.startTeleopDrive();
-                } else {
-                    currentPosition = follower.getPose();
-                    buildpaths();
-                    follower.followPath(pathone);
-                }
-            }
-
-            if (gamepad1.rightBumperWasPressed()) {
-                if (follower.isBusy()) {
-                    follower.breakFollowing();
-                    follower.startTeleopDrive();
-                } else {
-                    currentPosition = follower.getPose();
-                    buildpaths();
-                    follower.followPath(pathtwo);
-                }
-            }
-
-            // Emergency Break
-            if (gamepad1.bWasPressed()) {
-                follower.breakFollowing();
-                follower.startTeleopDrive();
-                shotlong = false;
-                shotshort = false;
+                currentPosition = follower.getPose();
+                buildpaths();
+                follower.followPath(pathone);
             }
 
             // Execute shooting/intake states
@@ -162,6 +115,19 @@ public class TestTeleop extends LinearOpMode {
             telemetry.addData("Busy", follower.isBusy());
             telemetry.update();
         }
+    }
+
+    public void drive(double forward, double right, double rotate) {
+        double frontLeftPower = forward + right + rotate;
+        double frontRightPower = forward - right - rotate;
+        double backRightPower = forward + right - rotate;
+        double backLeftPower = forward - right + rotate;
+
+        double max = Math.max(Math.abs(frontRightPower), Math.max(Math.abs(backLeftPower), Math.max(Math.abs(frontLeftPower), Math.abs(backRightPower))));
+        double scaleFactor = (max > 1) ? 1 / max : 1;
+
+        scaleFactor *= Math.max(Math.abs(1 - gamepad1.right_trigger), 0.2);
+        robot.setPower((frontRightPower) * scaleFactor, (backRightPower) * scaleFactor, (backLeftPower) * scaleFactor, (frontLeftPower) * scaleFactor);
     }
 
     public void buildpaths() {
