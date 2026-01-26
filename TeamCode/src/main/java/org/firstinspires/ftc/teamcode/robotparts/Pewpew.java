@@ -60,30 +60,31 @@ public class Pewpew {
     }
 
     public boolean outtake(Timer timer, int velocity) {
-        robot.intake.setPower(0.0);
-        robot.wheel.setPower(0);
-        robot.velocitySetter(velocity);
         double time = timer.getElapsedTimeSeconds();
 
-        robot.gatekeepTwo.setPosition(0.443);
-
-        if (timer.getElapsedTimeSeconds() > 1.2) {
-
-            robot.intake.setPower(0.99);
-            robot.wheelsetter(434);
-
-        }
-        if (timer.getElapsedTimeSeconds() > 1.35) {
-            robot.intake.setPower(0.85);
-            robot.wheelsetter(370);
-            robot.velocitySetter(velocity - 550);
-
-
-        }
-        if (timer.getElapsedTimeSeconds() > 5) {
+        // Sequential logic using if-else if to prevent motor flickering
+        if (time > 5.0) {
             robot.intake.setPower(0);
             robot.wheel.setPower(0);
             robot.gatekeepTwo.setPosition(0.147);
+        } else if (time > 1.35) {
+            // Intentional power drop for 2nd and 3rd balls
+            robot.velocitySetter(velocity - 550);
+            robot.intake.setPower(0.85);
+            robot.wheelsetter(370);
+            robot.gatekeepTwo.setPosition(0.443);
+        } else if (time > 1.2) {
+            // Full power burst
+            robot.velocitySetter(velocity);
+            robot.intake.setPower(0.99);
+            robot.wheelsetter(434);
+            robot.gatekeepTwo.setPosition(0.443);
+        } else {
+            // Initial spin up (Intake/Wheel off)
+            robot.velocitySetter(velocity);
+            robot.intake.setPower(0.0);
+            robot.wheelsetter(0);
+            robot.gatekeepTwo.setPosition(0.443);
         }
 
         telemetry.addData("Shot1Velocity", robot.shotMotorOne.getVelocity());
@@ -95,37 +96,28 @@ public class Pewpew {
 
     public boolean outtake(Timer timer, char s) {
         int longer = 5000;
-        robot.velocitySetter(longer);
         double time = timer.getElapsedTimeSeconds();
 
-
-        robot.gatekeepTwo.setPosition(0.442);
-        if (timer.getElapsedTimeSeconds() > 1.3) {
-            robot.intake.setPower(0.99);
-            robot.wheelsetter(430);
-
-        }
-        if (timer.getElapsedTimeSeconds() > 1.38) {
-            robot.velocitySetter(longer);
-        }
-        if (timer.getElapsedTimeSeconds() > 1.45) {
-            robot.intake.setPower(0.99);
-            robot.wheelsetter(430);
-
-
-        }
-        if (timer.getElapsedTimeSeconds() > 5) {
+        if (time > 5.0) {
             robot.intake.setPower(0);
             robot.wheel.setPower(0);
+            robot.gatekeepTwo.setPosition(0.147);
+        } else if (time > 1.3) {
+            robot.velocitySetter(longer);
+            robot.intake.setPower(0.99);
+            robot.wheelsetter(430);
+            robot.gatekeepTwo.setPosition(0.442);
+        } else {
+            robot.velocitySetter(longer);
+            robot.intake.setPower(0.0);
+            robot.wheelsetter(0);
+            robot.gatekeepTwo.setPosition(0.442);
         }
-
 
         telemetry.addData("Shot1Velocity", robot.shotMotorOne.getVelocity());
         telemetry.addData("Shot2Velocity", robot.shotMotorTwo.getVelocity());
         return (robot.intake.getPower() >= 0.7);
     }
-
-
 
 
     public void reset() {
