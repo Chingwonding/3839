@@ -30,7 +30,7 @@ public class SimpleAuto extends OpMode {
     private int pathState;
     private int cycleState;
 
-    public static final int velocity = 3510;
+    public static final int velocity = 3500;
     //paths and poses
     private PathChain pathone, pathtwoOne, pathtwoTwo, pathtwoThree, pathThreeOne, pathThreeTwo, pathThreeThree, pathThreeFour, pathfourOne, pathfourTwo, pathfourThree;
     private final Pose one = new Pose(122.64, 123.25, Math.toRadians(230));
@@ -41,11 +41,11 @@ public class SimpleAuto extends OpMode {
     private final Pose three = new Pose(100.991, 56.18, -3.03);
     private final Pose threeshot = new Pose(141.3856, 56.63, 3.136 );
 
-    private final Pose fourshot = new Pose(138.839, 33.709, -3.06);
-    private final Pose four = new Pose(109.070, 32.971, -3.015);
+    private final Pose fourshot = new Pose(141.096, 31.426, -3.06);
+    private final Pose four = new Pose(109.070, 32.971, -3.07);
 
     //five will be for shooting
-    private final Pose five = new Pose(92.21, 94.316, -2.46);
+    private final Pose five = new Pose(102.21, 87.55, -2.279);
 
     @Override
     public void init() {
@@ -140,6 +140,7 @@ public class SimpleAuto extends OpMode {
             case 4:
                 // Wait for arrival at shooting position
                 if (pathTimer.getElapsedTimeSeconds() > 0.1 && !follower.isBusy()) {
+
                     setCycleState(5);
                 }
                 break;
@@ -222,7 +223,8 @@ public class SimpleAuto extends OpMode {
                     setPathState(2);
                 }
                 break;
-            case 2: // Outtake Preload
+            case 2:
+                // Outtake Preload
                 pewpew.outtake(pathTimer, velocity);
                 if (pathTimer.getElapsedTimeSeconds() > 4) {
                     setPathState(3);

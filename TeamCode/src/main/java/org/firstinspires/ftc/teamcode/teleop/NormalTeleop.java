@@ -3,31 +3,25 @@ package org.firstinspires.ftc.teamcode.teleop;
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
-import com.pedropathing.follower.Follower;
-import com.pedropathing.geometry.BezierLine;
-import com.pedropathing.geometry.Pose;
-import com.pedropathing.paths.PathChain;
 import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 import org.firstinspires.ftc.teamcode.robotparts.Hardware;
 import org.firstinspires.ftc.teamcode.robotparts.Intake;
 import org.firstinspires.ftc.teamcode.robotparts.Lebron;
 import org.firstinspires.ftc.teamcode.robotparts.Pewpew;
-import com.qualcomm.robotcore.util.ElapsedTime;
 
 @Config
-@TeleOp (name = "3839's tears right side Teleop")
+@TeleOp (name = "3839's Normal Teleop (Manual)")
 public class NormalTeleop extends LinearOpMode {
 
-    public int speed = 3500;
+    public int speed = 3510;
 
     Timer timer = new Timer();
     Hardware robot = Hardware.getInstance();
     Intake intake = new Intake();
-    private Follower follower;
 
     Pewpew pewpew;
     Lebron lebron;
@@ -36,84 +30,107 @@ public class NormalTeleop extends LinearOpMode {
     private boolean shotshort = false;
     private boolean intaking = false;
 
-    // Shooting poses
-    private Pose currentPosition;
-    private final Pose longshot = new Pose(56, 36, Math.toRadians(75));
-    //private final Pose shortshot = new Pose(91.5, 100, Math.toRadians(45));
-    public final Pose endAutoPose = new Pose(90.79, 83.000, -2.33);
-
-    public PathChain pathone, pathtwo;
+    // Edge detection for button toggles
+    private boolean lastX = false;
+    private boolean lastA = false;
+    private boolean lastRB2 = false;
 
     @Override
     public void runOpMode() {
 
-        drive(-(Math.atan(5 * -gamepad1.left_stick_y) / Math.atan(5)),
-                (Math.atan(5 * -gamepad1.left_stick_x) / Math.atan(5)),
-                (Math.atan(5 * -gamepad1.right_stick_x) / Math.atan(5)) * 0.8);
-
-
-        // 1. Initialize Telemetry and Follower FIRST to avoid NullPointerException
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
-        follower = Constants.createFollower(hardwareMap);
-        follower.setStartingPose(new Pose(90.79, 83.000, -2.33));
-
-        // 2. Initialize other parts
         pewpew = new Pewpew(telemetry);
         lebron = new Lebron(telemetry);
         robot.init(hardwareMap);
 
-        telemetry.addData("Status", "Hello Drivers");
+        telemetry.addData("Status", "Normal Teleop (Manual) Initialized");
         telemetry.update();
 
         waitForStart();
 
         while (opModeIsActive()) {
 
-            if (gamepad1.xWasPressed()) {
+            // 1. Manual Mecanum Drive Logic
+            drive(-(Math.atan(5 * -gamepad1.left_stick_y) / Math.atan(5)),
+                    (Math.atan(5 * -gamepad1.left_stick_x) / Math.atan(5)),
+                    (Math.atan(5 * -gamepad1.right_stick_x) / Math.atan(5)) * 0.8);
+
+            // 2. Button Toggles for Shooting and Intake
+            boolean currentX = gamepad1.x;
+            boolean currentA = gamepad1.a;
+            boolean currentRB2 = gamepad2.right_bumper;
+
+            if (currentX && !lastX) {
                 shotlong = !shotlong;
+                intaking = false;
                 if (shotlong) {
                     timer.resetTimer();
-                    shotshort = false; // Mutually exclusive
+                    shotshort = false;
                 }
             }
-            if (gamepad1.aWasPressed()) {
+
+            if (currentA && !lastA) {
                 shotshort = !shotshort;
+                intaking = false;
                 if (shotshort) {
                     timer.resetTimer();
                     shotlong = false;
                 }
             }
-            //intake in general
-            if (gamepad2.right_bumper) {
+
+            if (currentRB2 && !lastRB2) {
                 intaking = !intaking;
+                if (intaking) {
+                    shotlong = false;
+                    shotshort = false;
+                }
             }
 
-            // Path Following Triggers
-            if (gamepad1.leftBumperWasPressed()) {
-                currentPosition = follower.getPose();
-                buildpaths();
-                follower.followPath(pathone);
+            if (gamepad1.b) {
+                shotlong = false;
+                shotshort = false;
+                intaking = false;
             }
 
-            // Execute shooting/intake states
+            // 3. Execute states - Mutually Exclusive
             if (shotlong) {
                 pewpew.outtake(timer, speed);
+                handleShooterBoost(speed);
             } else if (shotshort) {
                 pewpew.outtake(timer, speed);
-            } else {
-                pewpew.reset();
-            }
-
-            if (intaking) {
+                handleShooterBoost(speed);
+            } else if (intaking) {
                 intake.intake();
             } else {
-                intake.intake(0);
+                // Optimization: Only reset when we transition out of a state to keep loop fast
+                if (lastX != currentX || lastA != currentA || lastRB2 != currentRB2 || gamepad1.b) {
+                    pewpew.reset();
+                    intake.intake(0);
+                }
             }
 
+            lastX = currentX;
+            lastA = currentA;
+            lastRB2 = currentRB2;
+
             // Feedback
-            telemetry.addData("Position", follower.getPose().toString());
-            telemetry.addData("Busy", follower.isBusy());
+            telemetry.addData("Active Mode", shotlong ? "Long Shot" : (shotshort ? "Short Shot" : (intaking ? "Intaking" : "Idle")));
+            telemetry.addData("Shot velocity", robot.getVelocity());
             telemetry.update();
+        }
+    }
+
+    private void handleShooterBoost(int targetVelocity) {
+        if (targetVelocity < robot.shotMotorOne.getVelocity()
+                && targetVelocity < robot.shotMotorTwo.getVelocity())
+        {
+            robot.shotMotorOne.setPower(1);
+            robot.shotMotorTwo.setPower(1);
+        }
+        else
+        {
+            robot.shotMotorOne.setPower(0);
+            robot.shotMotorTwo.setPower(0);
         }
     }
 
@@ -123,22 +140,13 @@ public class NormalTeleop extends LinearOpMode {
         double backRightPower = forward + right - rotate;
         double backLeftPower = forward - right + rotate;
 
-        double max = Math.max(Math.abs(frontRightPower), Math.max(Math.abs(backLeftPower), Math.max(Math.abs(frontLeftPower), Math.abs(backRightPower))));
+        double max = Math.max(Math.abs(frontLeftPower), Math.max(Math.abs(frontRightPower), 
+                     Math.max(Math.abs(backLeftPower), Math.abs(backRightPower))));
+        
         double scaleFactor = (max > 1) ? 1 / max : 1;
-
         scaleFactor *= Math.max(Math.abs(1 - gamepad1.right_trigger), 0.2);
-        robot.setPower((frontRightPower) * scaleFactor, (backRightPower) * scaleFactor, (backLeftPower) * scaleFactor, (frontLeftPower) * scaleFactor);
-    }
-
-    public void buildpaths() {
-        pathone = follower.pathBuilder()
-                .addPath(new BezierLine(currentPosition, longshot))
-                .setLinearHeadingInterpolation(currentPosition.getHeading(), longshot.getHeading())
-                .build();
-
-        pathtwo = follower.pathBuilder()
-                .addPath(new BezierLine(currentPosition, endAutoPose))
-                .setLinearHeadingInterpolation(currentPosition.getHeading(), endAutoPose.getHeading())
-                .build();
+        
+        robot.setPower(frontRightPower * scaleFactor, backRightPower * scaleFactor, 
+                       backLeftPower * scaleFactor, frontLeftPower * scaleFactor);
     }
 }

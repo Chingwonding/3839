@@ -17,15 +17,19 @@ public class ShootingTester extends LinearOpMode {
 
     public static int targetVelocity = 3500;
 
+    public static int targetLongShot = 5000;
     private ElapsedTime runtime = new ElapsedTime();
     public int speed = 3800;
 
+    char b = 'b';
 
     Timer timer = new Timer();
     Pewpew pewpew;
 
     Hardware robot = Hardware.getInstance();
     boolean isShooting = false;
+
+    boolean farshooting = false;
     @Override
     public void runOpMode() {
         pewpew = new Pewpew(telemetry);
@@ -53,13 +57,59 @@ public class ShootingTester extends LinearOpMode {
                 }
 
             }
+
+            if (gamepad1.xWasPressed())
+            {
+                farshooting = !farshooting;
+                if (farshooting)
+                {
+                    timer.resetTimer();
+                }
+            }
+
+
             if (isShooting) {
                 pewpew.outtake(timer, targetVelocity);
+                /*
+                if (targetVelocity > robot.shotMotorOne.getVelocity()
+                        && targetVelocity > robot.shotMotorTwo.getVelocity())
+                {
+                    robot.shotMotorOne.setPower(1);
+                    robot.shotMotorTwo.setPower(1);
+                }
+                else
+                {
+                    robot.shotMotorOne.setPower(0);
+                    robot.shotMotorTwo.setPower(0);
+                }
+
+                 */
             }
-            if (!isShooting)
+            if (!isShooting & !farshooting)
             {
                 pewpew.reset();
+                /*
+                if (targetLongShot > robot.shotMotorOne.getVelocity()
+                        && targetLongShot > robot.shotMotorTwo.getVelocity())
+                {
+                    robot.shotMotorOne.setPower(1);
+                    robot.shotMotorTwo.setPower(1);
+                }
+                else
+                {
+                    robot.shotMotorOne.setPower(0);
+                    robot.shotMotorTwo.setPower(0);
+                }
+
+                 */
             }
+            if (farshooting)
+            {
+                pewpew.outtake(timer, b);
+            }
+
+
+
 
             double velo = robot.getVelocity();
             telemetry.addData("Shotmotortwo velocity: ", velo);

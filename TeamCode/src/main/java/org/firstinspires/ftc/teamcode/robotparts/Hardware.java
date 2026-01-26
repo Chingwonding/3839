@@ -15,10 +15,11 @@ public class Hardware {
     public DcMotor rb;
     public DcMotor lb;
 
-    public DcMotor wheel;
+    public DcMotorEx wheel;
 
 
     public static final int TPR = 28;
+    public static final double WHEEL_TPR = 383.6; // For 435 RPM motor (28 * 13.7)
 
 
 
@@ -50,6 +51,8 @@ public class Hardware {
 
         wheel = hwMap.get(DcMotorEx.class,"cm2");
         wheel.setDirection(DcMotorSimple.Direction.REVERSE);
+        wheel.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        wheel.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         wheel.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         wheel.setPower(0.00);
 
@@ -148,6 +151,16 @@ public class Hardware {
 
     public double RPMtoTPS(int rpm){
         return (double)(rpm*TPR)/60;
+    }
+
+    public double WheelRPMtoTPS(int rpm){
+        return (double)(rpm*WHEEL_TPR)/60;
+    }
+
+    public void wheelsetter(int velocity)
+    {
+        velocity = (int)WheelRPMtoTPS(velocity);
+        wheel.setVelocity(velocity);
     }
 
 
