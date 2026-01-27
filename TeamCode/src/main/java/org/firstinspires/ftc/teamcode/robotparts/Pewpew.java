@@ -63,7 +63,7 @@ public class Pewpew {
         double time = timer.getElapsedTimeSeconds();
 
         // Sequential logic using if-else if to prevent motor flickering
-        if (time > 5.0) {
+        if (time > 4.0) {
             robot.intake.setPower(0);
             robot.wheel.setPower(0);
             robot.gatekeepTwo.setPosition(0.147);
@@ -103,12 +103,12 @@ public class Pewpew {
             robot.wheel.setPower(0);
             robot.gatekeepTwo.setPosition(0.147);
         } else if (time > 1.3) {
-            robot.velocitySetter(longer);
+            robot.velocitySetter(longer - 800);
             robot.intake.setPower(0.99);
             robot.wheelsetter(430);
             robot.gatekeepTwo.setPosition(0.442);
         } else {
-            robot.velocitySetter(longer);
+            robot.velocitySetter(2400);
             robot.intake.setPower(0.0);
             robot.wheelsetter(0);
             robot.gatekeepTwo.setPosition(0.442);

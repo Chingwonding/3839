@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.autonomous;
 
+import static org.firstinspires.ftc.teamcode.pedroPathing.Tuning.follower;
+
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
@@ -13,8 +15,8 @@ import org.firstinspires.ftc.teamcode.robotparts.Intake;
 import org.firstinspires.ftc.teamcode.robotparts.Pewpew;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
-@Autonomous(name = "SUH FWAE FWAE Rightside", group = "Examples")
-public class SimpleAuto extends OpMode {
+@Autonomous(name = "Rightside Girth", group = "Examples")
+public class FarRightSide extends OpMode {
 
     //initialize stuff fr
     Hardware robot = Hardware.getInstance();
@@ -32,26 +34,23 @@ public class SimpleAuto extends OpMode {
 
     public static final int velocity = 3500;
     //paths and poses
-    private PathChain pathone,
-            pathtwoOne, pathtwoTwo,
-            pathtwoThree, pathThreeOne,
-            pathThreeTwo, pathThreeThree,
-            pathThreeFour, pathfourOne,
-            pathfourTwo, pathfourThree
-            , pathfinal;
-    private final Pose one = new Pose(122.64, 123.25, Math.toRadians(230));
+    private PathChain pathone, pathtwo, paththree, pathfinal, initial, pathfour;
 
-    private final Pose twoshot = new Pose(130.728, 80.175, -3.069);
-    private final Pose two = new Pose(100.49, 77.532, -3.025);
 
-    private final Pose three = new Pose(100.991, 56.18, -3.03);
-    private final Pose threeshot = new Pose(141.3856, 56.63, 3.136 );
+    private final Pose startingspot = new Pose(87.493,7.772, Math.toRadians(90));
+    private final Pose initially = new Pose(90.26, 3.69, 1.23);
+    private final Pose two = new Pose(53.62, -8.16, -0.94);
 
-    private final Pose fourshot = new Pose(141.096, 31.426, -3.06);
-    private final Pose four = new Pose(109.070, 32.971, -3.07);
 
-    //five will be for shooting
-    private final Pose five = new Pose(102.21, 87.55, -2.279);
+    private final Pose three = new Pose(53.88, 2.74, -0.849);
+
+    private final Pose four = new Pose(48.68, 9.27, -0.007);
+
+
+
+    private final Pose finalspot = new Pose(95.65, -15.125, -3.24);
+
+
 
     @Override
     public void init() {
@@ -62,57 +61,36 @@ public class SimpleAuto extends OpMode {
         follower = Constants.createFollower(hardwareMap);
         buildPaths();
 
-        follower.setStartingPose(new Pose(122.6370, 123.245, Math.toRadians(230)));
+        follower.setStartingPose(new Pose(87.493,7.772, Math.toRadians(90)));
     }
 
     public void buildPaths() {
+
+        initial = follower.pathBuilder()
+                .addPath(new BezierLine(startingspot, initially))
+                .setLinearHeadingInterpolation(startingspot.getHeading(), initially.getHeading()).build();
+
         pathone = follower.pathBuilder()
-                .addPath(new BezierLine(one, five))
-                .setLinearHeadingInterpolation(one.getHeading(), five.getHeading()).build();
+                .addPath(new BezierLine(initially, two))
+                .setLinearHeadingInterpolation(initially.getHeading(), two.getHeading()).build();
 
-        pathtwoOne = follower.pathBuilder()
-                .addPath(new BezierLine(five, two))
-                .setLinearHeadingInterpolation(five.getHeading(), two.getHeading()).build();
+        pathtwo = follower.pathBuilder()
+                .addPath(new BezierLine(two, three))
+                .setLinearHeadingInterpolation(two.getHeading(), three.getHeading()).build();
 
-        pathtwoTwo = follower.pathBuilder()
-                .addPath(new BezierLine(two, twoshot))
-                .setLinearHeadingInterpolation(two.getHeading(), twoshot.getHeading()).build();
+        paththree = follower.pathBuilder()
+                .addPath(new BezierLine(three, initially))
+                .setLinearHeadingInterpolation(three.getHeading(), initially.getHeading()).build();
 
-        pathtwoThree = follower.pathBuilder()
-                .addPath(new BezierLine(twoshot, five))
-                .setLinearHeadingInterpolation(twoshot.getHeading(), five.getHeading()).build();
-        
-        pathThreeOne = follower.pathBuilder()
-                .addPath(new BezierLine(five, three))
-                .setLinearHeadingInterpolation(five.getHeading(), three.getHeading()).build();
-
-        pathThreeTwo = follower.pathBuilder()
-                .addPath(new BezierLine(three, threeshot))
-                .setLinearHeadingInterpolation(three.getHeading(), threeshot.getHeading()).build();
-
-        pathThreeThree = follower.pathBuilder()
-                .addPath(new BezierLine(threeshot, three))
-                .setLinearHeadingInterpolation(threeshot.getHeading(), three.getHeading()).build();
-
-        pathThreeFour = follower.pathBuilder()
-                .addPath(new BezierLine(three, five))
-                .setLinearHeadingInterpolation(three.getHeading(), five.getHeading()).build();
-
-
-
-        pathfourOne = follower.pathBuilder()
-                .addPath(new BezierLine(five, four))
-                .setLinearHeadingInterpolation(five.getHeading(), four.getHeading()).build();
-        pathfourTwo = follower.pathBuilder()
-                .addPath(new BezierLine(four, fourshot))
-                .setLinearHeadingInterpolation(four.getHeading(), fourshot.getHeading()).build();
-        pathfourThree = follower.pathBuilder()
-                .addPath(new BezierLine(fourshot, five))
-                .setLinearHeadingInterpolation(fourshot.getHeading(), five.getHeading()).build();
+        pathfour = follower.pathBuilder()
+                .addPath(new BezierLine(three, four))
+                .setLinearHeadingInterpolation(three.getHeading(), four.getHeading()).build();
 
         pathfinal = follower.pathBuilder()
-                .addPath(new BezierLine(five, twoshot))
-                .setLinearHeadingInterpolation(five.getHeading(), twoshot.getHeading()).build();
+                .addPath(new BezierLine(initially, finalspot))
+                .setLinearHeadingInterpolation(initially.getHeading(), finalspot.getHeading()).build();
+
+
     }
     public boolean roidcycle(PathChain uno, PathChain dos, PathChain tres) {
         switch (cycleState) {
@@ -125,45 +103,33 @@ public class SimpleAuto extends OpMode {
                 setCycleState(1);
                 break;
             case 1:
-                // Wait for any previous movement to stop, then start uno
-                if (pathTimer.getElapsedTimeSeconds() > 0.1 && !follower.isBusy()) {
-                    follower.followPath(uno);
-                    setCycleState(2);
-                }
-                break;
-            case 2:
                 intake.intake();
                 // CRITICAL: Wait for uno to finish before starting dos
                 if (pathTimer.getElapsedTimeSeconds() > 0.1 && !follower.isBusy()) {
-                    follower.followPath(dos, 0.8, true);
-                    setCycleState(3);
+                    follower.followPath(uno, 0.8, true);
+                    setCycleState(2);
                 }
-                break;
             case 3:
-                // Wait for dos to finish before starting tres
                 if (pathTimer.getElapsedTimeSeconds() > 0.1 && !follower.isBusy()) {
-                    follower.followPath(tres, 0.96, true);
-                    setCycleState(4);
+                    follower.followPath(dos, 0.8, true);
+                    setCycleState(2);
                 }
-
                 break;
             case 4:
-                // Wait for arrival at shooting position
                 if (pathTimer.getElapsedTimeSeconds() > 0.1 && !follower.isBusy()) {
-
+                    follower.followPath(tres);
                     setCycleState(5);
                 }
-                break;
             case 5:
-                pewpew.outtake(pathTimer, velocity);
-                if (pathTimer.getElapsedTimeSeconds() > 2.0) {
+                pewpew.outtake(pathTimer, 'c');
+                if (pathTimer.getElapsedTimeSeconds() > 4.0) {
                     return true; // Signal completion to autonomousPathUpdate
                 }
                 break;
+
         }
         return false;
     }
-
 
     public boolean roidcycle(PathChain uno, PathChain dos, PathChain tres, PathChain quatro) {
         switch (cycleState) {
@@ -186,14 +152,14 @@ public class SimpleAuto extends OpMode {
                 intake.intake();
                 // CRITICAL: Wait for uno to finish before starting dos
                 if (pathTimer.getElapsedTimeSeconds() > 0.1 && !follower.isBusy()) {
-                    follower.followPath(dos, 0.8, true);
+                    follower.followPath(dos, 0.2, true);
                     setCycleState(3);
                 }
                 break;
             case 3:
                 // Wait for dos to finish before starting tres
                 if (pathTimer.getElapsedTimeSeconds() > 0.1 && !follower.isBusy()) {
-                    follower.followPath(tres, 0.96, true);
+                    follower.followPath(tres, 0.2, true);
                     setCycleState(4);
                 }
 
@@ -208,12 +174,12 @@ public class SimpleAuto extends OpMode {
             case 5:
                 //quatro begins
                 if (pathTimer.getElapsedTimeSeconds() > 0.1 && !follower.isBusy()) {
-                    follower.followPath(quatro);
+                    follower.followPath(quatro, 0.3, true);
                     setCycleState(6);
                 }
             case 6:
                 //quatro ends and outtake begins
-                pewpew.outtake(pathTimer, velocity);
+                pewpew.outtake(pathTimer, 'c');
                 if (pathTimer.getElapsedTimeSeconds() > 3.5) {
                     return true; // Signal completion to autonomousPathUpdate
                 }
@@ -224,47 +190,38 @@ public class SimpleAuto extends OpMode {
 
     public void autonomousPathUpdate() {
         switch (pathState) {
-            case 0: // Drive to initial shooting position
-                follower.followPath(pathone);
-                setPathState(1);
-                break;
-            case 1: // Wait for arrival
+            case 0:
+                telemetry.addLine("Beginning longshot");
                 if (pathTimer.getElapsedTimeSeconds() > 0.1 && !follower.isBusy()) {
+                    follower.followPath(initial);
+                    setPathState(1);
+                }
+
+            case 1:
+                pewpew.outtake(pathTimer, 'c');
+                setPathState(1);
+            case 2:
+                if (pathTimer.getElapsedTimeSeconds() > 4.0) {
+                    roidcycle(pathone, pathtwo, paththree, pathfour);
                     setPathState(2);
                 }
-                break;
-            case 2:
-                // Outtake Preload
-                pewpew.outtake(pathTimer, velocity);
-                if (pathTimer.getElapsedTimeSeconds() > 3.7) {
+            case 3:
+                if (roidcycle(pathone, pathtwo, paththree, pathfour))
+                {
                     setPathState(3);
-                }
-                break;
-            case 3: // First Pickup Cycle
-                if (roidcycle(pathtwoOne, pathtwoTwo, pathtwoThree)) {
-                    setPathState(4);
                     setCycleState(0);
                 }
-                break;
-            case 4: // Second Pickup Cycle
-                if (roidcycle(pathThreeOne, pathThreeTwo, pathThreeThree, pathThreeFour)) {
+            case 4:
+                if (pathTimer.getElapsedTimeSeconds() > 0.1 && !follower.isBusy())
+                {
+                    follower.followPath(pathfinal);
                     setPathState(5);
-                    setCycleState(0);
                 }
-                break;
             case 5:
-                if (roidcycle(pathfourOne, pathfourTwo, pathfourThree)) {
-                    setPathState(6);
-                    setCycleState(0);
-                }
-                break;
-            case 6:
-                follower.followPath(pathfinal);
-                setPathState(7);
-            case 7:
-                telemetry.addData("Auto Status", "Finished");
-                pewpew.reset();
-                break;
+                telemetry.addLine("LongShotAuto Complete");
+
+
+
         }
     }
 
