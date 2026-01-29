@@ -13,8 +13,8 @@ import org.firstinspires.ftc.teamcode.robotparts.Intake;
 import org.firstinspires.ftc.teamcode.robotparts.Pewpew;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
-@Autonomous(name = "SUHFWAEFWAE right", group = "Examples")
-public class SUHFWAEFWAERIGHT extends OpMode {
+@Autonomous(name = "Fwae rightside gate")
+public class SimpleGateAuto extends OpMode {
 
     //initialize stuff fr
     Hardware robot = Hardware.getInstance();
@@ -38,19 +38,24 @@ public class SUHFWAEFWAERIGHT extends OpMode {
             pathThreeTwo, pathThreeThree,
             pathThreeFour, pathfourOne,
             pathfourTwo, pathfourThree
-            , pathfinal;
-    private final Pose one = new Pose(153.306, 66.004, 3.123);
+            , pathfinal
+            , pathGateOne, pathGateTwo, pathGateThree, pathGateFour;
+    private final Pose one = new Pose(122.64, 123.25, Math.toRadians(230));
 
-    private final Pose twoshot = new Pose(134.26, 101.79, -2.408);
-    private final Pose two = new Pose(115.184, 85.159, -2.359);
-    private final Pose three = new Pose(98.386, 100.51, -2.35);
-    private final Pose threeshot = new Pose(121.86, 124.448, -2.354);
+    private final Pose twoshot = new Pose(130.728, 80.175, -3.069);
+    private final Pose two = new Pose(81.23, 98.468, -1.538);
 
-    private final Pose fourshot = new Pose(106.09, 141.29, -2.358);
-    private final Pose four = new Pose(83.85, 119.67, -2.364);
+    private final Pose three = new Pose(100.991, 56.18, -3.03);
+    private final Pose threeshot = new Pose(141.3856, 56.63, 3.136 );
+
+    private final Pose fourshot = new Pose(141.096, 31.426, -3.06);
+    private final Pose four = new Pose(109.070, 32.971, -3.07);
 
     //five will be for shooting
-    private final Pose five = new Pose(106.59, 73.347, 3.105);
+    private final Pose five = new Pose(159.33,114.68, -0.035);
+
+    private final Pose openGate = new Pose(90.0, 47.436, 1.44);
+    //private final Pose intakeGate = new Pose(80, 48.65, 1.754);
 
     @Override
     public void init() {
@@ -61,7 +66,7 @@ public class SUHFWAEFWAERIGHT extends OpMode {
         follower = Constants.createFollower(hardwareMap);
         buildPaths();
 
-        follower.setStartingPose(new Pose(153.306, 66.004, 3.123));
+        follower.setStartingPose(new Pose(122.6370, 123.245, Math.toRadians(230)));
     }
 
     public void buildPaths() {
@@ -112,6 +117,21 @@ public class SUHFWAEFWAERIGHT extends OpMode {
         pathfinal = follower.pathBuilder()
                 .addPath(new BezierLine(five, twoshot))
                 .setLinearHeadingInterpolation(five.getHeading(), twoshot.getHeading()).build();
+
+
+        pathGateOne = follower.pathBuilder()
+                .addPath(new BezierLine(five, openGate))
+                .setLinearHeadingInterpolation(five.getHeading(), openGate.getHeading()).build();
+
+        pathGateTwo = follower.pathBuilder()
+                .addPath(new BezierLine(openGate, two))
+                .setLinearHeadingInterpolation(openGate.getHeading(), two.getHeading()).build();
+
+        pathGateThree = follower.pathBuilder()
+                .addPath(new BezierLine(two, five))
+                .setLinearHeadingInterpolation(two.getHeading(), five.getHeading()).build();
+
+
     }
     public boolean roidcycle(PathChain uno, PathChain dos, PathChain tres) {
         switch (cycleState) {
@@ -221,6 +241,68 @@ public class SUHFWAEFWAERIGHT extends OpMode {
         return false;
     }
 
+    public boolean roidcycle(PathChain uno, PathChain dos, PathChain tres, PathChain quatro, String yes) {
+        switch (cycleState) {
+            case 0: // Reset and prepare
+                robot.shotMotorTwo.setVelocity(0);
+                robot.shotMotorOne.setVelocity(0);
+                robot.intake.setPower(0);
+                robot.wheel.setPower(0);
+                robot.gatekeepTwo.setPosition(0.147);
+                setCycleState(1);
+                break;
+            case 1:
+                // Wait for any previous movement to stop, then start uno
+                if (pathTimer.getElapsedTimeSeconds() > 0.1 && !follower.isBusy()) {
+                    follower.followPath(uno);
+                    setCycleState(2);
+                }
+                break;
+            case 2:
+                intake.intake();
+                // CRITICAL: Wait for uno to finish before starting dos
+                if (pathTimer.getElapsedTimeSeconds() > 0.1 && !follower.isBusy()) {
+                    follower.followPath(dos, 0.8, true);
+                    setCycleState(3);
+                }
+                break;
+            case 3:
+                // Wait for dos to finish before starting tres
+                if (pathTimer.getElapsedTimeSeconds() > 3 && !follower.isBusy()) {
+                    follower.followPath(tres, 0.96, true);
+                    setCycleState(4);
+                }
+
+                break;
+            case 4:
+                // tres should be finished by now
+                if (pathTimer.getElapsedTimeSeconds() > 0.1 && !follower.isBusy()) {
+                    setCycleState(5);
+                }
+                break;
+
+            case 5:
+                //quatro begins
+                if (pathTimer.getElapsedTimeSeconds() > 0.1 && !follower.isBusy()) {
+                    follower.followPath(quatro);
+                    setCycleState(6);
+                }
+            case 6:
+                //quatro ends and outtake begins
+                pewpew.outtake(pathTimer, velocity);
+                if (pathTimer.getElapsedTimeSeconds() > 3.5) {
+                    return true; // Signal completion to autonomousPathUpdate
+                }
+                break;
+        }
+        return false;
+    }
+
+
+
+
+
+
     public void autonomousPathUpdate() {
         switch (pathState) {
             case 0: // Drive to initial shooting position
@@ -251,16 +333,25 @@ public class SUHFWAEFWAERIGHT extends OpMode {
                     setCycleState(0);
                 }
                 break;
+
             case 5:
-                if (roidcycle(pathfourOne, pathfourTwo, pathfourThree)) {
+                if (roidcycle(pathGateOne, pathGateTwo, pathGateThree))
+                {
                     setPathState(6);
                     setCycleState(0);
                 }
                 break;
             case 6:
+                if (roidcycle(pathfourOne, pathfourTwo, pathfourThree)) {
+                    setPathState(5);
+                    setCycleState(0);
+                }
+                break;
+            case 7:
+
                 follower.followPath(pathfinal);
                 setPathState(7);
-            case 7:
+            case 8:
                 telemetry.addData("Auto Status", "Finished");
                 pewpew.reset();
                 break;
