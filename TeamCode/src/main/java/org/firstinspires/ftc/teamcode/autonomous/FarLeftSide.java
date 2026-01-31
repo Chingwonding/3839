@@ -13,8 +13,8 @@ import org.firstinspires.ftc.teamcode.robotparts.Intake;
 import org.firstinspires.ftc.teamcode.robotparts.Pewpew;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
-@Autonomous(name = "Right Alliance Long")
-public class FarRightSide extends OpMode {
+@Autonomous(name = "Left Alliance Long")
+public class FarLeftSide extends OpMode {
 
     Hardware robot = Hardware.getInstance();
     Pewpew pewpew;
@@ -28,9 +28,9 @@ public class FarRightSide extends OpMode {
     private PathChain pathone, pathtwo;
 
     // Defined Poses
-    private final Pose startingspot = new Pose(106.917, 7.452, -1.48);
-    private final Pose initially = new Pose(103.907, 9.1646, -1.86);
-    private final Pose finnally = new Pose(102.162, 29.206, -1.4929);
+    private final Pose startingspot = new Pose(46.711, 133.858, 2.312);
+    private final Pose initially = new Pose(50.88, 126.01, 2.687);
+    private final Pose finnally = new Pose(62.1919, 117.0399, 2.3177);
 
     @Override
     public void init() {

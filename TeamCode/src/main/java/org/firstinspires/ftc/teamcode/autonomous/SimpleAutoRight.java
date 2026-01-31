@@ -13,8 +13,8 @@ import org.firstinspires.ftc.teamcode.robotparts.Intake;
 import org.firstinspires.ftc.teamcode.robotparts.Pewpew;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
-@Autonomous(name = "SUH FWAE FWAE Rightside", group = "Examples")
-public class SimpleAuto extends OpMode {
+@Autonomous(name = "carti front right")
+public class SimpleAutoRight extends OpMode {
 
     //initialize stuff fr
     Hardware robot = Hardware.getInstance();

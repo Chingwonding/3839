@@ -25,7 +25,6 @@ public class Constants {
             .drivePIDFCoefficients(new FilteredPIDFCoefficients(0.025, 0, 0.00001, 0.6, 0.01))
             .centripetalScaling(0.0005);
 
-
     //did heading
     //check pedropathing website for steps to do next to remove confusion
 

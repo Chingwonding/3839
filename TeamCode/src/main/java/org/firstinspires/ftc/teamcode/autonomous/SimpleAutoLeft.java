@@ -13,8 +13,8 @@ import org.firstinspires.ftc.teamcode.robotparts.Intake;
 import org.firstinspires.ftc.teamcode.robotparts.Pewpew;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
-@Autonomous(name = "SUHFWAEFWAE right", group = "Examples")
-public class SUHFWAEFWAERIGHT extends OpMode {
+@Autonomous(name = "carti front left")
+public class SimpleAutoLeft extends OpMode {
 
     //initialize stuff fr
     Hardware robot = Hardware.getInstance();
@@ -42,15 +42,13 @@ public class SUHFWAEFWAERIGHT extends OpMode {
     private final Pose one = new Pose(153.306, 66.004, 3.123);
 
     private final Pose twoshot = new Pose(134.26, 101.79, -2.408);
-    private final Pose two = new Pose(115.184, 85.159, -2.359);
+    private final Pose two = new Pose(109.681, 82.044, -2.37);
     private final Pose three = new Pose(98.386, 100.51, -2.35);
     private final Pose threeshot = new Pose(121.86, 124.448, -2.354);
 
     private final Pose fourshot = new Pose(106.09, 141.29, -2.358);
-    private final Pose four = new Pose(83.85, 119.67, -2.364);
-
-    //five will be for shooting
-    private final Pose five = new Pose(106.59, 73.347, 3.105);
+    private final Pose four = new Pose(77.112, 116.52, -2.35);
+    private final Pose five = new Pose(113.569, 74.01, -3.12);
 
     @Override
     public void init() {

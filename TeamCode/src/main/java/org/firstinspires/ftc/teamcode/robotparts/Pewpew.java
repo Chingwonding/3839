@@ -108,7 +108,7 @@ public class Pewpew {
             robot.wheelsetter(430);
             robot.gatekeepTwo.setPosition(0.442);
         } else {
-            robot.velocitySetter(2400);
+            robot.velocitySetter(2200);
             robot.intake.setPower(0.0);
             robot.wheelsetter(0);
             robot.gatekeepTwo.setPosition(0.442);

@@ -135,7 +135,12 @@ class LocalizationTest extends OpMode {
         //follower.setStartingPose(new Pose(122.6370,123.245, Math.toRadians(230)));
         //follower.setStartingPose(new Pose(87.493,7.772, Math.toRadians(90)));
 
-        follower.setStartingPose(new Pose(122.6370, 123.245, Math.toRadians(230)));
+        //follower.setStartingPose(new Pose(113.569, 74.01, -3.12));
+        //follower.setStartingPose(new Pose(153.306, 66.004, 3.123));
+        //follower.setStartingPose(new Pose(130.728, 80.175, -3.069));
+        follower.setStartingPose(new Pose(62.1919, 117.0399, 2.3177));
+
+
     }
 
     /** This initializes the PoseUpdater, the mecanum drive motors, and the Panels telemetry. */
