@@ -13,7 +13,7 @@ import org.firstinspires.ftc.teamcode.robotparts.Pewpew;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
 @Autonomous(name = "carti front left")
-public class SimpleAutoLeft extends OpMode {
+public class ThreeBallAutoRight extends OpMode {
 
     //initialize stuff fr
     Hardware robot = Hardware.getInstance();
@@ -37,7 +37,7 @@ public class SimpleAutoLeft extends OpMode {
             pathThreeTwo, pathThreeThree,
             pathThreeFour, pathfourOne,
             pathfourTwo, pathfourThree
-            , pathfinal;
+            , pathfinal, pathAlliance;
     private final Pose one = new Pose(153.306, 66.004, 3.123);
 
     private final Pose twoshot = new Pose(134.26, 101.79, -2.408);
@@ -47,6 +47,9 @@ public class SimpleAutoLeft extends OpMode {
     private final Pose fourshot = new Pose(106.09, 141.29, -2.358);
     private final Pose four = new Pose(77.112, 116.52, -2.35);
     private final Pose five = new Pose(113.569, 74.01, -3.12);
+
+    //placeholder
+    private final Pose alliance = new Pose(101.8723, 127.829, -1.46);
 
     @Override
     public void init() {
@@ -108,6 +111,12 @@ public class SimpleAutoLeft extends OpMode {
         pathfinal = follower.pathBuilder()
                 .addPath(new BezierLine(five, twoshot))
                 .setLinearHeadingInterpolation(five.getHeading(), twoshot.getHeading()).build();
+
+
+        pathAlliance = follower.pathBuilder()
+                .addPath(new BezierLine(five, alliance))
+                .setLinearHeadingInterpolation(five.getHeading(), alliance.getHeading()).build();
+
     }
     public boolean roidcycle(PathChain uno, PathChain dos, PathChain tres) {
         switch (cycleState) {
@@ -155,6 +164,7 @@ public class SimpleAutoLeft extends OpMode {
                     return true; // Signal completion to autonomousPathUpdate
                 }
                 break;
+
         }
         return false;
     }
@@ -235,31 +245,16 @@ public class SimpleAutoLeft extends OpMode {
                     setPathState(3);
                 }
                 break;
-            case 3: // First Pickup Cycle
-                if (roidcycle(pathtwoOne, pathtwoTwo, pathtwoThree)) {
+            case 3:
+                if (pathTimer.getElapsedTimeSeconds() > 0.1 && !follower.isBusy()) {
+                    follower.followPath(pathAlliance);
                     setPathState(4);
-                    setCycleState(0);
                 }
                 break;
-            case 4: // Second Pickup Cycle
-                if (roidcycle(pathThreeOne, pathThreeTwo, pathThreeThree, pathThreeFour)) {
-                    setPathState(5);
-                    setCycleState(0);
-                }
-                break;
-            case 5:
-                if (roidcycle(pathfourOne, pathfourTwo, pathfourThree)) {
-                    setPathState(6);
-                    setCycleState(0);
-                }
-                break;
-            case 6:
-                follower.followPath(pathfinal);
-                setPathState(7);
-            case 7:
-                telemetry.addData("Auto Status", "Finished");
-                pewpew.reset();
-                break;
+            case 4:
+                telemetry.addLine("Autonomous finished, now what?");
+
+
         }
     }
 

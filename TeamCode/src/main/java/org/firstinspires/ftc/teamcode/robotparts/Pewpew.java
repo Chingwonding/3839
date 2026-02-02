@@ -103,7 +103,7 @@ public class Pewpew {
             robot.wheel.setPower(0);
             robot.gatekeepTwo.setPosition(0.147);
         } else if (time > 1.3) {
-            robot.velocitySetter(longer - 800);
+            robot.velocitySetter(longer - 600);
             robot.intake.setPower(0.99);
             robot.wheelsetter(430);
             robot.gatekeepTwo.setPosition(0.442);
@@ -113,7 +113,6 @@ public class Pewpew {
             robot.wheelsetter(0);
             robot.gatekeepTwo.setPosition(0.442);
         }
-
         telemetry.addData("Shot1Velocity", robot.shotMotorOne.getVelocity());
         telemetry.addData("Shot2Velocity", robot.shotMotorTwo.getVelocity());
         return (robot.intake.getPower() >= 0.7);

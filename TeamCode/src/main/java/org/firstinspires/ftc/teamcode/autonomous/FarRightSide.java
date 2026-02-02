@@ -25,12 +25,16 @@ public class FarRightSide extends OpMode {
     private int pathState;
 
     public static final int velocity = 3500;
-    private PathChain pathone, pathtwo;
+    private PathChain pathone, pathtwo, paththree, pathfour, pathfive, pathsix;
 
     // Defined Poses
     private final Pose startingspot = new Pose(106.917, 7.452, -1.48);
     private final Pose initially = new Pose(103.907, 9.1646, -1.86);
+
+    private final Pose baller = new Pose (135.51, 8.432, -3.100);
+    private final Pose balling = new Pose(149.30, 8.91, -3.11);
     private final Pose finnally = new Pose(102.162, 29.206, -1.4929);
+
 
     @Override
     public void init() {
@@ -56,6 +60,18 @@ public class FarRightSide extends OpMode {
                 .addPath(new BezierLine(initially, finnally))
                 .setLinearHeadingInterpolation(initially.getHeading(), finnally.getHeading())
                 .build();
+
+        paththree = follower.pathBuilder()
+                .addPath(new BezierLine(initially, baller))
+                .setLinearHeadingInterpolation(initially.getHeading(), baller.getHeading())
+                .build();
+
+        pathfour = follower.pathBuilder()
+                .addPath(new BezierLine(baller, balling))
+                .setLinearHeadingInterpolation(baller.getHeading(), balling.getHeading())
+                .build();
+
+
     }
 
     public void autonomousPathUpdate() {
@@ -66,29 +82,71 @@ public class FarRightSide extends OpMode {
                     setPathState(1);
                 }
                 break;
-
-            case 1: // Outtake at first position
+            case 1:
                 if (!follower.isBusy()) {
                     pewpew.outtake(pathTimer, 'c');
                     // Wait for shooting to complete
                     if (pathTimer.getElapsedTimeSeconds() > 3.0) {
+                        pewpew.reset();
                         setPathState(2);
                     }
                 }
                 break;
 
-            case 2: // Move to final position
-                if (!follower.isBusy()) {
-                    follower.followPath(pathtwo);
+            case 2:
+                intake.intake();
+                if (pathTimer.getElapsedTime() > 0.3)
+                {
                     setPathState(3);
                 }
                 break;
-
-            case 3: // Final telemetry
-                if (!follower.isBusy()) {
-                    telemetry.addLine("Autonomous Finished");
+            case 3:
+                if (pathTimer.getElapsedTimeSeconds() > 0.2 && !follower.isBusy()) {
+                    follower.followPath(paththree);
+                    setPathState(4);
                 }
                 break;
+            case 4:
+                if (pathTimer.getElapsedTimeSeconds() > 0.2 & !follower.isBusy())
+                {
+                    follower.followPath(pathfour);
+                    setPathState(5);
+                }
+                break;
+            case 5:
+                if (pathTimer.getElapsedTimeSeconds() > 0.2 && !follower.isBusy()) {
+                    follower.followPath(paththree);
+                    setPathState(6);
+                }
+                break;
+            case 6:
+                if (pathTimer.getElapsedTimeSeconds() > 0.2 & !follower.isBusy())
+                {
+                    follower.followPath(pathfour);
+                    setPathState(7);
+                }
+                break;
+            case 7:
+                if (!follower.isBusy() && pathTimer.getElapsedTimeSeconds() > 4) {
+                    pewpew.outtake(pathTimer, 'c');
+                    // Wait for shooting to complete
+                    if (pathTimer.getElapsedTimeSeconds() > 3.0) {
+                        pewpew.reset();
+                        setPathState(8);
+                    }
+                }
+                break;
+            case 8:
+            if (pathTimer.getElapsedTimeSeconds() >0.3 & !follower.isBusy())
+                {
+                    follower.followPath(pathtwo);
+                    setPathState(8);
+                }
+                break;
+
+            case 9:
+                telemetry.addLine("Auto Supposedly finished");
+
         }
     }
 
